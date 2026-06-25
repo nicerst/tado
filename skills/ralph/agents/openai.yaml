@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ralph"
+  short_description: "Autonomous story-by-story execution loop"
+  default_prompt: "Use $ralph to explain or prepare the autonomous execution loop for this project."
+
+policy:
+  allow_implicit_invocation: true

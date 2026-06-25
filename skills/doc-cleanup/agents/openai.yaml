@@ -1,0 +1,7 @@
+interface:
+  display_name: "Doc Cleanup"
+  short_description: "Classify stale markdown and clean it safely"
+  default_prompt: "Use $doc-cleanup to scan this repo's markdown files and classify cleanup candidates."
+
+policy:
+  allow_implicit_invocation: true

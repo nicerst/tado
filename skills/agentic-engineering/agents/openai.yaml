@@ -1,0 +1,7 @@
+interface:
+  display_name: "Agentic Engineering"
+  short_description: "Harness-first execution doctrine"
+  default_prompt: "Use $agentic-engineering to choose the right execution pattern for this work."
+
+policy:
+  allow_implicit_invocation: true

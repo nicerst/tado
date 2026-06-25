@@ -1,0 +1,7 @@
+interface:
+  display_name: "Feature Init"
+  short_description: "Plan a feature into executable stories"
+  default_prompt: "Use $feature-init to turn this feature idea into a codebase-grounded plan and story set."
+
+policy:
+  allow_implicit_invocation: true

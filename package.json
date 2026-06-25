@@ -1,0 +1,45 @@
+{
+  "name": "@nicerst/tado",
+  "version": "0.1.0",
+  "description": "Portable lifecycle skill bundle with install flows for Codex, .agents, Claude-style, Cursor-style, and Codex plugin scaffolding.",
+  "type": "module",
+  "bin": {
+    "tado": "./bin/tado.js"
+  },
+  "files": [
+    ".codex-plugin",
+    "agents",
+    "bin",
+    "lib",
+    "skills",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "codex",
+    "skills",
+    "agent",
+    "claude",
+    "cursor",
+    "lifecycle"
+  ],
+  "author": "nicerst",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicerst/tado.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/nicerst/tado",
+  "bugs": {
+    "url": "https://github.com/nicerst/tado/issues"
+  }
+}

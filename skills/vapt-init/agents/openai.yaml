@@ -1,0 +1,7 @@
+interface:
+  display_name: "VAPT Init"
+  short_description: "Create a project security baseline"
+  default_prompt: "Use $vapt-init to produce a security baseline and risk report for this project."
+
+policy:
+  allow_implicit_invocation: true

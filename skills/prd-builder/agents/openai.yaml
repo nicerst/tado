@@ -1,0 +1,7 @@
+interface:
+  display_name: "PRD Builder"
+  short_description: "Turn an idea into a real PRD"
+  default_prompt: "Use $prd-builder to turn this product idea into a concrete PRD."
+
+policy:
+  allow_implicit_invocation: true

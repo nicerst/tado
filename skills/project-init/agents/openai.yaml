@@ -1,0 +1,7 @@
+interface:
+  display_name: "Project Init"
+  short_description: "Bootstrap a project and its Codex harness"
+  default_prompt: "Use $project-init to bootstrap this repo before feature work starts."
+
+policy:
+  allow_implicit_invocation: true

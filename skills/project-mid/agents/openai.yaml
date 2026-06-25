@@ -1,0 +1,7 @@
+interface:
+  display_name: "Project Mid"
+  short_description: "Drift check and scope recalibration"
+  default_prompt: "Use $project-mid to audit drift, refresh the plan, and prep the remaining work."
+
+policy:
+  allow_implicit_invocation: true

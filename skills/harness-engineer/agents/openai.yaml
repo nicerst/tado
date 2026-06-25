@@ -1,0 +1,7 @@
+interface:
+  display_name: "Harness Engineer"
+  short_description: "Audit and upgrade the Codex harness"
+  default_prompt: "Use $harness-engineer to audit this repo's harness and report the gaps."
+
+policy:
+  allow_implicit_invocation: true

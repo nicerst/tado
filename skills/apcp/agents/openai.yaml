@@ -1,0 +1,7 @@
+interface:
+  display_name: "APCP"
+  short_description: "Session continuity from files, not chat"
+  default_prompt: "Use $apcp to orient this session from the project files before we continue."
+
+policy:
+  allow_implicit_invocation: true

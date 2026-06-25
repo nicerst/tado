@@ -1,0 +1,7 @@
+interface:
+  display_name: "Memory Writer"
+  short_description: "Persist non-obvious decisions and patterns"
+  default_prompt: "Use $memory-writer to capture the durable decisions and patterns from this session."
+
+policy:
+  allow_implicit_invocation: true

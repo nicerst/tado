@@ -1,0 +1,7 @@
+interface:
+  display_name: "Frontend"
+  short_description: "Frontend build and audit quality"
+  default_prompt: "Use $frontend to implement or audit this UI work."
+
+policy:
+  allow_implicit_invocation: true

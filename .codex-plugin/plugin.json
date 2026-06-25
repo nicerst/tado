@@ -1,0 +1,37 @@
+{
+  "name": "tado",
+  "version": "0.1.0",
+  "description": "Lifecycle and harness skills for Codex-style agent workflows.",
+  "author": {
+    "name": "nicerst",
+    "url": "https://github.com/nicerst"
+  },
+  "homepage": "https://github.com/nicerst/tado",
+  "repository": "https://github.com/nicerst/tado",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skills",
+    "lifecycle",
+    "harness"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "TADO Lifecycle Skills",
+    "shortDescription": "Lifecycle, planning, and harness skills",
+    "longDescription": "Installable lifecycle skill bundle for project bootstrap, feature planning, handoff continuity, harness work, and autonomous story execution.",
+    "developerName": "nicerst",
+    "category": "Productivity",
+    "capabilities": [
+      "Write"
+    ],
+    "websiteURL": "https://github.com/nicerst/tado",
+    "privacyPolicyURL": "https://github.com/nicerst/tado",
+    "termsOfServiceURL": "https://github.com/nicerst/tado",
+    "defaultPrompt": [
+      "Bootstrap this repo with $project-init.",
+      "Plan this feature with $feature-init.",
+      "Audit the harness with $harness-engineer."
+    ]
+  }
+}
