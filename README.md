@@ -9,9 +9,13 @@ Bundled skills (22):
 | **lifecycle** | `apcp`, `project-init`, `project-mid`, `feature-init`, `ralph`, `memory-writer` |
 | **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright` |
 | **design** | `frontend`, `ai-ui-design` |
-| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc` |
+| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹ |
 | **deliberation** | `the-council` |
-| **utilities** | `caveman`, `ai-news`, `doc-cleanup` |
+| **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
+
+> ¹ **`opensrc`** — Claude only. Uses `allowed-tools: Bash(opensrc:*)` frontmatter (ignored by Codex) and requires the `opensrc` binary installed separately. Installs to Codex but tool permission won't auto-apply.
+>
+> ² **`ai-news`** — Claude only. Uses `WebSearch` tool and writes to `raw/website/` — both Claude Code-specific. Installs to Codex but won't function without equivalent tool wiring.
 
 ## Install via `npx`
 

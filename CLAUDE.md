@@ -21,9 +21,12 @@ tado list                                    # print bundled skill names
 | **lifecycle** | `apcp`, `project-init`, `project-mid`, `feature-init`, `ralph`, `memory-writer` |
 | **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright` |
 | **design** | `frontend`, `ai-ui-design` |
-| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc` |
+| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹ |
 | **deliberation** | `the-council` |
-| **utilities** | `caveman`, `ai-news`, `doc-cleanup` |
+| **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
+
+> ¹ `opensrc` — Claude only. `allowed-tools` frontmatter ignored by Codex; requires `opensrc` binary.
+> ² `ai-news` — Claude only. Uses `WebSearch` + writes to `raw/website/`; won't function in Codex without equivalent tool wiring.
 
 ## Structure
 
@@ -34,7 +37,7 @@ lib/install.js       skill + agent copy/symlink logic
 lib/plugin.js        Codex plugin scaffold + marketplace upsert
 lib/constants.js     targets, layouts, skill names — single source of truth
 lib/fs-utils.js      ensureDir / copyOrSymlink / readJson / writeJson
-skills/              14 SKILL.md bundles (installed verbatim)
+skills/              22 SKILL.md bundles (installed verbatim)
 agents/codex/        harness-engineer.toml
 agents/claude/       harness-engineer.md
 test/cli.test.js     integration tests (no mocks)
