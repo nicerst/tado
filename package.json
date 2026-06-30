@@ -1,6 +1,6 @@
 {
   "name": "@nicerst/tado",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Portable lifecycle skill bundle with install flows for Codex, .agents, Claude-style, Cursor-style, and Codex plugin scaffolding.",
   "type": "module",
   "bin": {

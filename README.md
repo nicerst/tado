@@ -2,18 +2,15 @@
 
 Portable lifecycle skill bundle for Codex-style agent workflows.
 
-Bundled skills:
-- `apcp`
-- `project-init`
-- `feature-init`
-- `project-mid`
-- `ralph`
-- `harness-engineer`
-- `memory-writer`
-- `vapt-init`
-- `agentic-engineering`
-- `prd-builder`
-- support skills: `frontend`, `doc-cleanup`, `grill-with-docs`, `context7`
+Bundled skills (17):
+
+| Group | Skills |
+|-------|--------|
+| **lifecycle** | `apcp`, `project-init`, `project-mid`, `feature-init`, `ralph`, `memory-writer` |
+| **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init` |
+| **design** | `frontend`, `ai-ui-design` |
+| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7` |
+| **maintenance** | `doc-cleanup` |
 
 ## Install via `npx`
 
