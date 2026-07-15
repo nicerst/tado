@@ -13,6 +13,10 @@ The fix is not better prompting. The fix is a Design System built first, then al
 
 > Don't ask AI to design pages. Ask AI to design a design system, then build pages from it.
 
+**Orchestrated workflow:** spawn `Agent(subagent_type="uiux-smell-auditor")` for audit mode, `Agent(subagent_type="uiux-token-importer")` for step 5's design-system import, and `Agent(subagent_type="uiux-page-builder")` (one call per page) for step 6's page builds — instead of running any of those inline. Use inline only for quick interactive/`/slash` use, and for steps 1-4 and 7, which happen in Claude Design/guidance form with the human directly.
+
+This orchestrator owns: invocation routing (`/ai-ui-design`, `audit`, `step <N>`), the opening context question, steps 1-4 (which happen in Claude Design with the human — the orchestrator supplies the exact prompts below), and step 7 library guidance. It delegates steps 5, 6 (codebase-touching work), and audit mode to the subagents above.
+
 ---
 
 ## Relationship to Other Skills
@@ -29,7 +33,7 @@ The fix is not better prompting. The fix is a Design System built first, then al
 | Invocation | What it does |
 |---|---|
 | `/ai-ui-design` | Guide through 7-step workflow (new build or missing design system) |
-| `/ai-ui-design audit` | Run AI smell check on an existing UI — returns diagnosis + punch list |
+| `/ai-ui-design audit` | Spawn `uiux-smell-auditor` on the existing UI — returns diagnosis + punch list |
 | `/ai-ui-design step <N>` | Jump to a specific step (e.g., `step 6` to get the build-application prompt) |
 
 If no context provided, ask: *"Are you building a new UI, adding pages to an existing app, or auditing an existing UI for AI smell?"*
@@ -54,7 +58,7 @@ With a Design System, changing `color-primary` updates buttons, cards, badges, i
 
 ## The 7-Step Workflow
 
-### Step 1 — Collect Inspiration
+### Step 1 — Collect Inspiration (inline — human's own research)
 
 Gather references **before** asking AI to design anything.
 
@@ -71,7 +75,7 @@ Do not copy. Extract the DNA: macrostructure, type rhythm, color mood, density.
 
 ---
 
-### Step 2 — Generate Design System
+### Step 2 — Generate Design System (inline — happens in Claude Design)
 
 **Tool:** Claude Design (claude.ai/design)
 
@@ -99,7 +103,7 @@ while producing a reusable, production-ready design system.
 
 ---
 
-### Step 3 — Generate Components
+### Step 3 — Generate Components (inline — happens in Claude Design)
 
 **Tool:** Claude Design (continuing the conversation)
 
@@ -122,7 +126,7 @@ Include accessibility considerations and reusable size variants (sm / md / lg).
 
 ---
 
-### Step 4 — Refine
+### Step 4 — Refine (inline — happens in Claude Design)
 
 **Do NOT accept the first AI output.** This step is mandatory.
 
@@ -159,7 +163,7 @@ Expect no 1:1 match with the reference screenshot — AI can't do pixel-faithful
 
 ---
 
-### Step 5 — Export to Claude Code
+### Step 5 — Export to Claude Code (delegate)
 
 Export the finalized design system from Claude Design.
 
@@ -172,39 +176,24 @@ Export the finalized design system from Claude Design.
 - Component HTML/CSS/JSX as reference
 - Design guidelines (do / don't rules)
 
-**In Claude Code, set context:**
-```
-Import the attached design system into this project.
-
-Strictly follow the design tokens, components, spacing, typography, and interaction patterns.
-Do not invent new styles. If a needed component doesn't exist in the design system, 
-flag it and ask before inventing styles.
-```
+Spawn `uiux-token-importer` with the exported design system and the target project path. It imports tokens/typography/components without inventing styles, and flags any missing component instead of improvising — review its reported gaps with the user before proceeding to step 6.
 
 ---
 
-### Step 6 — Build Application Pages
+### Step 6 — Build Application Pages (delegate, one call per page)
 
-**Tool:** Claude Code
+For each page in the target list, spawn `uiux-page-builder` with: the page name, the imported design system location (from step 5's output), and any page-specific content. Rules it enforces:
 
-**Prompt to use:**
-```
-Using the imported design system, build the following pages:
-
-- [Page 1: e.g., Landing page]
-- [Page 2: e.g., Dashboard]
-- [Page 3: e.g., Settings]
-
-Rules:
 - Use design tokens for every color, spacing, radius, and shadow value
 - Reuse existing components — do not create new component variants without flagging
 - Match the visual density and rhythm of the design system
 - Every page should feel like it belongs to the same application
-```
+
+Collect and present any token/component gaps each page build reports back to the user before moving to the next page.
 
 ---
 
-### Step 7 — Enhance with UI Libraries
+### Step 7 — Enhance with UI Libraries (inline guidance)
 
 After the foundation is consistent, add interaction polish.
 
@@ -221,33 +210,16 @@ After the foundation is consistent, add interaction polish.
 
 ---
 
-## Audit Mode
+## Audit Mode (delegate)
 
-When user invokes `audit` or describes an existing UI, run this checklist:
+When user invokes `audit` or describes an existing UI, spawn `uiux-smell-auditor` with the codebase path(s). It runs the 12-check AI Smell Scan and returns:
 
-**AI Smell Scan:**
-```
-❌ FAILING / ✅ PASSING / ⚠ BORDERLINE
-
-[ ] Consistent border radius across all components
-[ ] Consistent spacing rhythm (evidence of spacing scale)
-[ ] Single cohesive color palette (no random hex values)
-[ ] Typography hierarchy (clear display / heading / body distinction)
-[ ] Dashboard matches landing page visual language
-[ ] All buttons same visual style (primary/secondary/ghost system)
-[ ] No gradient text on headings
-[ ] No glassmorphism as default treatment
-[ ] No identical card grids for non-list content
-[ ] No eyebrow text on every section
-[ ] Hover / focus states defined for interactive elements
-[ ] Empty states designed (not just blank space)
-```
-
-Output:
 1. AI Smell Score: [X/12 checks passing]
 2. Critical failures (fix first)
 3. Secondary issues
 4. Root cause: missing design system / missing tokens / component drift
+
+Present this diagnosis to the user as the punch list; do not re-derive it inline.
 
 ---
 

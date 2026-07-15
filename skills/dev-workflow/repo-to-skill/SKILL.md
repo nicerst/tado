@@ -7,76 +7,38 @@ description: Use when the user gives a GitHub URL or owner/repo and wants it tur
 
 Turn one GitHub repository into one installable skill. Methodology in, skill out — never a code dump.
 
-## Input
+**Orchestrated workflow**: spawn `Agent(subagent_type="rts-repo-scout")` for the bounded fetch + read phase, and `Agent(subagent_type="rts-skill-writer")` for applying the extraction rubric and writing the SKILL.md — instead of running either inline. Use inline only for quick interactive/`/slash` use where the human just wants to talk through whether a repo is skill-worthy before committing to a full build.
+
+This orchestrator owns: input parsing, the ONE-capability decision + ambiguity question, the existing-skill collision check, the pure-data-repo stop rule, and the final report. It never clones, reads repo source, or writes the SKILL.md itself — that's delegated.
+
+## Input (orchestrator-owned)
 
 Accept a GitHub URL (`https://github.com/owner/repo`, with or without `/tree/...` path) or bare `owner/repo`. Anything else: ask for one.
 
-## Fetch (bounded — never full clone)
+## Delegation: fetch and distill
 
-1. `git clone --depth 1 https://github.com/owner/repo <scratchpad>/repo-to-skill/<repo>` into the scratchpad dir. If git clone fails or is unavailable, fall back to GitHub API: `gh api repos/owner/repo/readme`, `gh api repos/owner/repo/contents/docs`.
-2. Read ONLY, in this order, stopping when you have enough to distill:
-   - README (root)
-   - docs/ or documentation/ (top-level pages, skip generated API dumps)
-   - examples/ or samples/ (top-level files)
-   - Public API surface if needed: main entry file, CLI help, package manifest (package.json / pyproject.toml / Cargo.toml)
-3. Never read: node_modules, vendor/, dist/, build/, lockfiles, binaries, test fixtures, .git internals.
-4. Delete the clone from scratchpad after distillation.
+Spawn `Agent(subagent_type="rts-repo-scout")`, passing it the parsed owner/repo (and subpath if given). It returns distilled raw material (setup, usage patterns, decision rules, gotchas) — never a full source dump, never internal implementation details.
 
-## Extraction rubric
+## Pure-data-repo stop rule (orchestrator-owned — check before proceeding to capability decision)
 
-Skill-worthy = what a user/agent DOES with this project, executable without reading the repo:
-- Install + setup sequence, required config
-- Core usage patterns: commands, API calls, idiomatic snippets from README/examples
-- Decision rules ("use X mode when...", version/compat constraints)
-- Gotchas, anti-patterns, common errors documented in README/issues templates/FAQ
+If the scout's returned material indicates the repo is pure data/content/template with no reusable workflow (awesome-lists, datasets, wallpaper packs), say so and stop — do not force a skill out of a description, and do not spawn the skill-writer.
 
-NOT skill-worthy (drop it):
-- Internal implementation details, contributor/dev-setup docs, CI config
-- Wholesale code copied from src/ — quote only short idiomatic snippets shown in docs/examples
-- Badges, star counts, license boilerplate, changelogs
+## ONE-capability decision + ambiguity question (orchestrator-owned)
 
-If repo is pure data/content/template with no reusable workflow (awesome-lists, datasets, wallpaper packs), say so and stop — do not force a skill out of a description.
+From the scout's distilled material, identify the ONE core capability. Monorepo / multiple unrelated tools → ask the user which, or pick the dominant one and say so. Ask the user for name/scope only if genuinely ambiguous — don't ask reflexively when the dominant capability is clear.
 
-## Procedure
+Derive a kebab-case skill name from the capability (not necessarily the repo name — e.g. `sharp` repo → `sharp-image-processing`).
 
-1. Parse input to owner/repo. Fetch per rules above.
-2. Identify the ONE core capability. Monorepo / multiple unrelated tools → ask user which, or pick the dominant one and say so. Ask for name/scope only if genuinely ambiguous.
-3. Derive kebab-case skill name from the capability (not necessarily the repo name — `sharp` repo → `sharp-image-processing`).
-4. Check `~/.claude/skills/<name>/` doesn't exist; if it does, propose updating instead of overwriting.
-5. Write `~/.claude/skills/<name>/SKILL.md` using the template below.
-6. Verify: frontmatter parses (name + description present, description has ≥2 concrete trigger phrases), body under ~150 lines.
-7. Report: skill name, path written, one-line summary, trigger phrases, what was dropped.
+## Existing-skill collision check (orchestrator-owned)
+
+Check `~/.claude/skills/<name>/` doesn't already exist. If it does, propose updating instead of overwriting — do not silently overwrite, and do not delegate this decision to the skill-writer.
+
+## Delegation: write the skill
+
+Spawn `Agent(subagent_type="rts-skill-writer")`, passing it: the scout's distilled material, the chosen kebab-case name, the target path (new or update), and the pinned commit sha/version the scout read. It applies the extraction rubric, writes `~/.claude/skills/<name>/SKILL.md` from the template, and verifies frontmatter/line-count/trigger-phrase requirements before returning.
 
 Do NOT edit CLAUDE.md or register the skill anywhere else unless the user asks.
 
-## Output template
+## Final report (orchestrator-owned)
 
-```markdown
----
-name: <kebab-case-name>
-description: Use when <task the repo solves> — <2-3 concrete trigger phrases, library/tool name included>.
----
-
-# <Title>
-
-<One-line purpose.>
-
-## When to use / when NOT to use
-
-## Setup
-<Install command, required config. Pin the major version you read docs for.>
-
-## Core usage
-<The 3-7 patterns that cover 90% of use. Real commands/snippets from README/examples — never invented.>
-
-## Rules / gotchas
-<Version constraints, documented pitfalls, decision rules.>
-
----
-Source: github.com/<owner>/<repo> @ <commit sha or version tag read>
-```
-
-Rules for the generated skill:
-- Instructions to the agent, second person, imperative. Not repo notes.
-- Every snippet traceable to README/docs/examples at the pinned sha. No invented APIs.
-- Under ~150 lines. One skill = one capability.
+After the skill-writer returns, report to the user: skill name, path written, one-line summary, trigger phrases, and what was dropped (per the extraction rubric's NOT-skill-worthy list, as relayed by the scout/writer).

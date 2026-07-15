@@ -1,6 +1,6 @@
 ---
 name: humanize-proofreader
-description: Use when user pastes text and wants it proofread and improved while sounding naturally human — not stilted AI phrasing. Triggers: "proofread this", "make this sound human", "fix this text", "clean this up", "/humanize-proofreader".
+description: Proofread and line-edit pasted prose so it reads naturally human, not stilted AI phrasing — grammar, clarity, flow, voice preservation. Scope is prose editing only, not code fixes. Not for evading plagiarism/AI-detection in an academic-integrity context — flag that intent instead of proceeding silently. Triggers: "proofread this", "line-edit this", "make this sound human", "rewrite this paragraph naturally", "clean up this draft/email/post", "/humanize-proofreader".
 ---
 
 # Humanize Proofreader
@@ -25,7 +25,3 @@ NOT:
 ## Output
 
 Return edited text only, same structure (paragraphs/lines) as input. No preamble, no "Here's the improved version" wrapper.
-
-## Note
-
-Optimizes for natural voice, not detector-evasion for academic/dishonest submission — flag this to user if intent looks like bypassing plagiarism/AI-detection checks in an academic-integrity context.

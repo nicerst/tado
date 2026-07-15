@@ -1,6 +1,6 @@
 ---
 name: yt-to-skill
-description: Turn a YouTube transcript into a reusable Claude Code skill. Extracts the teachable methodology (not a summary) and writes ~/.claude/skills/<name>/SKILL.md. Use when user pastes a transcript, gives a transcript file, or says "/yt-to-skill", "turn this video into a skill", "skillify this transcript".
+description: Turn a YouTube transcript into a reusable Claude Code skill. Extracts the teachable methodology (not a summary) and writes SKILL.md to the project's `.claude/skills/<name>/` or the global `~/.claude/skills/<name>/`, whichever fits context. Use when user pastes a transcript, gives a transcript file, or says "/yt-to-skill", "turn this video into a skill", "skillify this transcript".
 ---
 
 # YT-to-Skill
@@ -37,11 +37,15 @@ say so and stop — do not force a skill out of a summary.
 1. Read transcript. Identify the ONE core methodology. Multiple unrelated
    topics → ask user which one, or pick the dominant one and say so.
 2. Derive kebab-case skill name from the methodology (not the video title).
-3. Check `~/.claude/skills/<name>/` doesn't already exist; if it does, propose
+3. Pick the target directory: if working inside a project that has its own
+   `.claude/skills/`, or the methodology is project-specific, write there;
+   otherwise default to the global `~/.claude/skills/`. If it's ambiguous,
+   ask the user rather than assuming.
+4. Check `<target-dir>/<name>/` doesn't already exist; if it does, propose
    updating it instead of overwriting.
-4. Write `~/.claude/skills/<name>/SKILL.md` using the template below.
-5. Report: skill name, one-line summary, trigger phrase, what was dropped as
-   non-skill-worthy.
+5. Write `<target-dir>/<name>/SKILL.md` using the template below.
+6. Report: skill name, target path, one-line summary, trigger phrase, what
+   was dropped as non-skill-worthy.
 
 ## Output template
 
@@ -77,5 +81,4 @@ Rules for the generated skill:
 
 ## Other platforms
 
-Generated SKILL.md is plain markdown — paste body into ChatGPT custom GPT
-instructions or Codex `AGENTS.md` as-is. No transform step.
+Generated SKILL.md is plain markdown, so it drops into ChatGPT custom GPT instructions or Codex `AGENTS.md` as-is — no transform step needed.

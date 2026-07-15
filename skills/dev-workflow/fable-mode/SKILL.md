@@ -5,9 +5,7 @@ description: Elevates any model (Opus, Sonnet, Haiku, open-source) to work with 
 
 # Fable Mode
 
-The model isn't the moat — the process is. This skill packages the working
-discipline that makes frontier-model output good, so a cheaper model can run
-it and land close to the same result for a fraction of the cost.
+Run this discipline so a cheaper model lands close to frontier-model output quality: five gates in order, then route the right effort level and model to the task.
 
 ## When to use / when NOT to use
 
@@ -76,13 +74,11 @@ the piece where judgment compounds.
 - If a sub-agent workflow costs 3x more for the same output quality, that 3x
   is going somewhere identifiable (redundant reasoning, over-verification) —
   find it, don't just accept the bill.
-- You can't own model intelligence (it can be taken away, gated, changed).
-  You can own your process — the gates, the routing table, the skill files.
-  Invest there.
-- If you ever get a deliverable you loved but can't explain why: have the
+- Model intelligence isn't yours to keep (it can be taken away, gated,
+  changed). The gates, the routing table, the skill files are — invest there.
+- If a deliverable turns out great but the reason isn't clear: have the
   model analyze its own session — what it thought, how it got there, how it
-  proved it worked — then extract that into a skill. That's how this skill
-  was meant to be built in the first place.
+  proved it worked — then extract that into a skill.
 
 ---
 Source: YouTube transcript on Fable 5 / model routing methodology (title/channel/URL not provided in transcript)

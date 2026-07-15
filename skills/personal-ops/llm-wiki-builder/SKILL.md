@@ -27,6 +27,8 @@ Turn any document pile (transcripts, PDFs, URLs, meeting notes) into a self-main
 
 ### Ingest (every subsequent interaction)
 
+The vault's own CLAUDE.md is the source of truth for schema once it exists — if it defines its own folder conventions, ingest rules, or page format, follow those instead of the defaults below. The steps here are the bootstrap default, used only when no CLAUDE.md schema exists yet (e.g., during first-time setup, step 3).
+
 1. Accept source as: file dropped in `raw/`, a URL to read, or pasted text.
 2. Split the source into as many wiki pages as it naturally contains — one concept/entity/technique per page, not one page per source. A large source may become 10+ pages.
 3. Cross-link aggressively with `[[backlinks]]`. The value over separate summaries is the connections — when two sources reference the same concept, that shared page is where non-obvious links surface (e.g., two vendors benchmarking against different baselines).
@@ -36,8 +38,8 @@ Turn any document pile (transcripts, PDFs, URLs, meeting notes) into a self-main
 
 - Structure emerges from data — don't pre-build folders. Let subfolders (concepts/, entities/, sources/, techniques/, tools/) appear when a corpus earns them. Homogeneous data (e.g., meeting recordings) often stays flat — flat is easier for agents to search.
 - One wiki per topic domain (e.g., video transcripts vs. meeting notes), each with its own ingest rules tuned to its data type.
-- After batch ingests, review: click through pages and backlinks; if organization doesn't make sense to YOU, update the ingest rules in CLAUDE.md. Wiki must make sense to human and AI.
-- CLAUDE.md acts as a router: routing rules tell agents where to look for what, across one or many wikis.
+- After batch ingests, review: click through pages and backlinks; if organization doesn't make sense to YOU, update the ingest rules in the vault's CLAUDE.md. Wiki must make sense to human and AI.
+- The vault's CLAUDE.md acts as a router: routing rules tell agents where to look for what, across one or many wikis.
 - Everything is plain markdown — deliberately portable. Any agent (Claude Code, Codex, others) can consume the same wiki.
 - Use a cheaper model for routine ingests; save the frontier model for synthesis/queries over the assembled data.
 - Visual layer (Obsidian graph view) is free — comes from the backlinks, no extra work.
