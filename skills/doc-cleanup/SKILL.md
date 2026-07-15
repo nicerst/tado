@@ -29,7 +29,7 @@ Find all `.md` files in project, excluding:
 find . -name "*.md" \
   -not -path "./.git/*" \
   -not -path "./node_modules/*" \
-  -not -path "./.Codex/*" \
+  -not -path "./.claude/*" \
   -not -path "./wiki/*" \
   -not -path "./raw/*" \
   | sort
@@ -40,14 +40,14 @@ Also get last-modified and size for each:
 find . -name "*.md" \
   -not -path "./.git/*" \
   -not -path "./node_modules/*" \
-  -not -path "./.Codex/*" \
+  -not -path "./.claude/*" \
   -not -path "./wiki/*" \
   -not -path "./raw/*" \
   -exec stat -f "%Sm %z %N" -t "%Y-%m-%d" {} \; 2>/dev/null \
   || find . -name "*.md" \
   -not -path "./.git/*" \
   -not -path "./node_modules/*" \
-  -not -path "./.Codex/*" \
+  -not -path "./.claude/*" \
   -not -path "./wiki/*" \
   -not -path "./raw/*" \
   -printf "%TY-%Tm-%Td %s %p\n" 2>/dev/null | sort
@@ -65,12 +65,12 @@ Assign each file to exactly one category using these rules in order. First match
 |---------|------|
 | `README*.md` | Core project docs |
 | `CHANGELOG*.md` | Version history |
-| `AGENTS.md`, `AGENTS.md`, `MEMORY.md` | Harness files |
+| `CLAUDE.md`, `AGENTS.md`, `MEMORY.md` | Harness files |
 | `LICENSE*.md` | Legal |
 | `CONTRIBUTING*.md` | Community docs |
 | `docs/**/*.md` | Versioned documentation |
 | `SPEC.md`, `PRD.md`, `ADR-*.md` | Active specifications |
-| Any file referenced in `AGENTS.md` or `AGENTS.md` | In active use |
+| Any file referenced in `CLAUDE.md` or `AGENTS.md` | In active use |
 
 ### DELETE candidates — ephemeral, no ongoing value
 
@@ -110,7 +110,7 @@ Scanned: N .md files
 
 ✅ PROTECTED (N) — not touched
    README.md
-   AGENTS.md
+   CLAUDE.md
    ...
 
 🗑  DELETE (N) — ephemeral, safe to remove
@@ -191,7 +191,7 @@ If called from project-init: output one-liner summary then return control.
 ## Rules
 
 - **Never delete PROTECTED files.** Even if user says "delete everything."
-- **Never delete .Codex/** files. Harness files are always off-limits.
+- **Never delete .claude/** files. Harness files are always off-limits.
 - **Read before delete** for any REVIEW item — 5-line preview before confirming.
 - **Never batch-delete without showing the list first.** List → confirm → delete.
 - **If uncertain about a file**: put it in REVIEW, not DELETE. Err conservative.

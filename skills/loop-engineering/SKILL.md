@@ -175,13 +175,13 @@ When user wants to build a new loop, gather requirements through these questions
 (code change / document / database update / API call / report)
 
 **Q4 — Who or what evaluates the output?**
-(separate AI agent / deterministic test / human review gate / all three)
+(separate AI agent / deterministic test / human review gate / all three — concrete implementation: `agentic-review-loop` skill's AI review score gate ≥4/5)
 
 **Q5 — Where is state stored?**
 (state.md file / database table / Git commit / CRM record)
 
 **Q6 — What are the budget limits?**
-(max tokens per run / max retries / daily budget / cost alert threshold)
+(max tokens per run / max retries / daily budget / cost alert threshold — pair with `fable-mode` effort calibration to match reasoning depth to loop budget instead of a fixed default)
 
 Then produce a complete loop design:
 

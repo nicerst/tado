@@ -1,62 +1,86 @@
 ---
 name: ralph
-description: >
-  Autonomous agent loop for story-by-story execution. Uses `prd.json` as the
-  source of truth, spawns a fresh agent each iteration, commits one story at a
-  time, and stops only when all stories pass or the loop limit is hit.
+description: "Autonomous agent loop: execute a PRD in iterative cycles until all user stories pass. Each cycle spawns a fresh agent, commits one story, marks it done. Use for long-running implementation tasks that exceed single-session context."
 trigger: /ralph
+version: 1.0.0
 ---
 
 # /ralph
 
-Ralph is the execution engine after planning is done.
+Autonomous implementation loop. Turns a PRD into code, one user story per iteration, until all stories pass.
 
-## When to use
+Named after Ralph Wiggum — not smart, but keeps going.
 
-- multi-story implementation that exceeds one session
-- unattended or semi-attended build loops
-- after `/feature-init`
-- after `/project-mid` recalibrates the remaining scope
+---
 
-## Core model
+## When to Use
 
-`prd.json` + `progress.txt` + git commits are the memory.
+- Multi-story implementation that would exhaust a single context window
+- Unattended coding runs (overnight, between meetings)
+- Projects where each story is independently committable
+- Testing how far an agent can run before needing human input
 
-Per iteration:
-1. fresh agent starts cold
-2. reads `prd.json`, `AGENTS.md`, `progress.txt`
-3. picks next highest-priority `passes: false` story
-4. implements that story only
-5. runs the project quality gate
-6. commits
-7. flips the story to `passes: true`
-8. appends a short note to `progress.txt`
-9. emits `<promise>COMPLETE</promise>` only when no failing stories remain
+---
 
-## Story rules
+## How It Works
 
-- one story = one context window
-- one story = one commit
-- acceptance criteria must be pass/fail, not taste-based
-- dependent stories must be ordered so every commit compiles standalone
+```
+prd.json (stories with passes: false)
+  → ralph.sh spawns fresh claude/amp
+  → agent reads prd.json, picks highest-priority passes: false story
+  → implements all acceptance criteria
+  → runs quality checks (typecheck, tests, lint)
+  → commits with story ID in message
+  → marks story passes: true in prd.json
+  → appends summary to progress.txt
+  → if all stories pass: outputs <promise>COMPLETE</promise>
+  → ralph.sh detects signal → exits 0
+  → else: ralph.sh waits 2s → spawns next iteration
+```
 
-## Expected `prd.json` shape
+Each iteration: **fresh context**. No accumulated hallucination or context drift. Memory lives in git history + `progress.txt` + `prd.json`.
 
-Minimum shape:
+Each iteration must decide and record its reasoning in `progress.txt`, never pause mid-story to ask the user — runs are unattended by design; a fresh-context agent that asks a clarifying question stalls the whole run.
+
+---
+
+## Setup
+
+```bash
+# Add ralph files to your project root
+# Minimum: ralph.sh + CLAUDE.md + prd.json
+# Source: https://github.com/snarktank/ralph
+
+chmod +x ralph.sh
+```
+
+Or use `opensrc` to fetch:
+
+```bash
+opensrc path snarktank/ralph
+cp $(opensrc path snarktank/ralph)/ralph.sh ./
+cp $(opensrc path snarktank/ralph)/CLAUDE.md ./RALPH.md  # rename to avoid collision
+cp $(opensrc path snarktank/ralph)/prd.json.example ./prd.json
+```
+
+---
+
+## prd.json Format
 
 ```json
 {
-  "project": "ProjectName",
-  "branchName": "feature/short-name",
-  "description": "Short project summary",
+  "project": "MyApp",
+  "branchName": "ralph/feature-name",
+  "description": "Short description of what to build",
   "userStories": [
     {
       "id": "US-001",
-      "title": "Story title",
-      "description": "Single execution unit",
+      "title": "Add priority field to database",
+      "description": "As a developer, I need to store task priority so it persists.",
       "acceptanceCriteria": [
-        "Mechanical AC 1",
-        "Mechanical AC 2"
+        "Add priority column to tasks table: 'high' | 'medium' | 'low' (default 'medium')",
+        "Generate and run migration successfully",
+        "Typecheck passes"
       ],
       "priority": 1,
       "passes": false,
@@ -66,41 +90,96 @@ Minimum shape:
 }
 ```
 
-Ralph should treat `userStories` as the source list. Do not invent alternate schemas mid-run.
+**Priority** = execution order. Lower = first. Each story should be independently committable.
 
-## Setup
+**Story design rules:**
+- One story = one commit. Scope accordingly.
+- Acceptance criteria must be verifiable (pass/fail, not "looks good").
+- Dependent stories must have sequential priorities with no gaps between them.
 
-Minimum files:
-- `ralph.sh`
-- `prd.json`
-- `AGENTS.md`
-
-Useful supporting files:
-- `progress.txt`
-- `.Codex/project-dna.md`
-- `HANDOFF.md`
+---
 
 ## Running
 
-Examples:
-
 ```bash
-./ralph.sh --tool Codex 10
-./ralph.sh --tool amp 15
+./ralph.sh --tool claude 10      # up to 10 iterations, Claude Code
+./ralph.sh --tool amp 20         # up to 20 iterations, Amp
+./ralph.sh 5                     # 5 iterations, default tool (amp)
 ```
 
-The number is max iterations, not story count.
+Watch output in terminal. Each iteration prints header + agent output.
 
-## Relationship to `/project-mid`
+**Stop condition:** `<promise>COMPLETE</promise>` in agent output → exits 0.
+**Timeout:** hits max iterations → exits 1. Check `progress.txt` for last known state.
+**Stall condition:** same story fails quality checks 2 cycles in a row with no change in failure mode (same error, same file) → stop, flag story for human review. Don't burn remaining iterations retrying an unchanging failure.
 
-`/project-mid` is real, not planned. Its job is to:
-1. audit shipped vs drifted vs outstanding work
-2. rebuild a clean `prd.json`
-3. print the manual `ralph` launch command if the user wants autonomous execution
+---
 
-## Rules
+## Memory Architecture
 
-- Never auto-launch from a skill. Print the command; user runs it.
-- Never edit `prd.json` mid-run from another session.
-- Never mark a story passed without the gate succeeding.
-- Keep the loop simple. No daemon, no extra state store, no scheduler unless the current shell loop is proven insufficient.
+| File | Purpose | Durability |
+|------|---------|-----------|
+| `prd.json` | Stories + pass/fail state | Persists across runs |
+| `progress.txt` | Append-only iteration log | Never reset within run |
+| `git commits` | Each story = one atomic commit | Permanent |
+| `.last-branch` | Detects branch change → triggers archive | Temp tracking |
+| `archive/` | Snapshots of completed runs | Permanent |
+
+**Archive trigger:** when `branchName` in prd.json changes between runs, previous `prd.json` + `progress.txt` auto-archive to `archive/YYYY-MM-DD-feature-name/`.
+
+---
+
+## Customizing Quality Checks
+
+The per-iteration `CLAUDE.md` prompt tells the agent what quality gates to run. Edit the quality checks section:
+
+```markdown
+## Quality Checks (must all pass before marking story done)
+- npx tsc --noEmit
+- npm test
+- npm run lint
+- npx playwright test    # add for E2E
+```
+
+Adapt to your stack: `pytest` for Python, `go test ./...` for Go, `cargo test` for Rust.
+
+For story-level code review beyond typecheck/test/lint, wire `agentic-review-loop`'s AI review score gate (≥4/5) into the per-iteration CLAUDE.md prompt — the generator (ralph's spawned agent) should not be the one approving its own story as done.
+
+---
+
+## Monitoring a Run
+
+```bash
+# Watch progress in real time
+tail -f progress.txt
+
+# See completed stories
+cat prd.json | jq '.userStories[] | select(.passes == true) | .title'
+
+# See remaining stories
+cat prd.json | jq '.userStories[] | select(.passes == false) | .title'
+
+# Git log of story commits
+git log --oneline
+```
+
+---
+
+## Project-Mid Candidate
+
+Ralph is the execution engine for a planned `project-mid` health-check skill. At day 30+, when a project has accumulated stories and humans need to step back:
+1. `/project-mid` recalibrates scope, archives completed stories, surfaces drift
+2. Hands off remaining stories to ralph for autonomous execution
+3. Human reviews and merges ralph's commits
+
+`project-mid` is flagged, not yet built.
+
+---
+
+## Anti-Patterns
+
+- Tightly coupled stories — if US-002 requires US-001's schema change, order correctly and ensure each commit compiles standalone
+- Max iterations too high — diminishing returns after context is "used up"; 10–15 is usually right
+- No quality checks in CLAUDE.md — ralph marks stories done without verifying they work
+- Editing prd.json during a ralph run — ralph reads it at iteration start; concurrent edits confuse state
+- Stories with vague acceptance criteria — "looks good" is not verifiable; use specific pass/fail tests

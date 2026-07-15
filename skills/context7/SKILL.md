@@ -31,12 +31,12 @@ Fetch live, version-specific library docs straight into context. Prevents halluc
 npx ctx7 setup
 ```
 
-Auto-detects agent type (Codex, Cursor, OpenCode), installs skill + optionally configures MCP. Use `--Codex` to target Codex explicitly.
+Auto-detects agent type (Claude Code, Cursor, OpenCode), installs skill + optionally configures MCP. Use `--claude` to target Claude Code explicitly.
 
-### Codex MCP setup (manual)
+### Claude Code MCP setup (manual)
 
 ```bash
-Codex mcp add context7 npx @upstash/context7-mcp@latest
+claude mcp add context7 npx @upstash/context7-mcp@latest
 ```
 
 ### API key (optional, higher rate limits)
@@ -55,7 +55,7 @@ Get free key at https://context7.com/dashboard. Pass via `CONTEXT7_API_KEY` env 
 }
 ```
 
-### AGENTS.md ambient rule (add after setup)
+### CLAUDE.md ambient rule (add after setup)
 
 ```
 # Context7
@@ -135,9 +135,9 @@ At Step 0 (stack detection), check if Context7 is configured:
 cat package.json 2>/dev/null | grep -E '"next"|"react"|"supabase"|"prisma"|"drizzle"|"stripe"'
 ```
 
-If framework/ORM detected and Context7 not yet in `.Codex/settings.json`:
+If framework/ORM detected and Context7 not yet in `.claude/settings.json`:
 - Offer to run `npx ctx7 setup`
-- Add ambient rule to `AGENTS.md`
+- Add ambient rule to `CLAUDE.md`
 
 ---
 

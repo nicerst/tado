@@ -67,6 +67,8 @@ Gather references **before** asking AI to design anything.
 
 Do not copy. Extract the DNA: macrostructure, type rhythm, color mood, density.
 
+**No inspiration?** Use a published design.md as the foundation layer (e.g., `vercel.com/design.md`, light or dark variant) — paste it into Claude Design with "build me a design system using the attached design.md" — then tweak until it's yours. A foundation to build on, not to copy.
+
 ---
 
 ### Step 2 — Generate Design System
@@ -149,13 +151,19 @@ Suggest specific improvements and update the design system accordingly.
 - [ ] All sections use same fade-in animation
 - [ ] Dashboard doesn't visually match the landing page
 
-**Finalize the Design System before development begins.** Decisions made here propagate everywhere.
+**Refinement technique — markup:** in Claude Design, use the markup tool to draw directly on the offending elements, then instruct ("remove this from the design system", "fix the alignment of the text in this badge"). Pointing beats describing.
+
+Expect no 1:1 match with the reference screenshot — AI can't do pixel-faithful capture. It gives you a canvas to tweak; that's the point.
+
+**Finalize the Design System before development begins.** Decisions made here propagate everywhere. Once ported to Claude Code, never tweak the design system downstream — change it in Claude Design, re-export, so one fix propagates everywhere.
 
 ---
 
 ### Step 5 — Export to Claude Code
 
 Export the finalized design system from Claude Design.
+
+**Fastest path:** Claude Design → Share → "Send to Claude Code" — copies a prompt that makes Claude Code pull the project via the Claude Design MCP (design system, tokens, components, metadata) directly. Manual transfer below as fallback.
 
 **What to transfer:**
 - CSS custom properties (design tokens)
