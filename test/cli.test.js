@@ -25,7 +25,7 @@ test("installBundle copies skills and codex agent companion", async () => {
     "utf8"
   );
 
-  assert.match(featureInit, /# \/feature-init/);
+  assert.match(featureInit, /name: feature-init/);
   assert.match(harnessAgent, /name = "harness-engineer"/);
 });
 
@@ -51,6 +51,31 @@ test("installBundle copies claude skills and agent companion", async () => {
   assert.match(projectInit, /# \/project-init/);
   assert.match(harnessAgent, /^---/m);
   assert.match(harnessAgent, /name:\s*harness-engineer/);
+});
+
+test("installBundle flattens categorized skills and installs their subagents", async () => {
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "tado-categorized-"));
+  const claudeRoot = path.join(tempRoot, ".claude");
+
+  await installBundle({
+    targetArg: "claude",
+    mode: "copy",
+    rootOverride: claudeRoot
+  });
+
+  const skillPath = path.join(claudeRoot, "skills", "repo-to-skill", "SKILL.md");
+  const skillContent = await fs.readFile(skillPath, "utf8");
+  assert.match(skillContent, /name: repo-to-skill/);
+
+  await assert.rejects(
+    fs.access(path.join(claudeRoot, "skills", "dev-workflow"))
+  );
+
+  const subagent = await fs.readFile(
+    path.join(claudeRoot, "agents", "rts-repo-scout.md"),
+    "utf8"
+  );
+  assert.match(subagent, /name: rts-repo-scout/);
 });
 
 test("installBundle supports symlink mode", async () => {
@@ -83,7 +108,7 @@ test("installBundle maps cursor skills to ~/.cursor/skills", async () => {
   await assert.rejects(
     fs.access(path.join(cursorRoot, "skills-cursor", "feature-init", "SKILL.md"))
   );
-  assert.match(featureInit, /# \/feature-init/);
+  assert.match(featureInit, /name: feature-init/);
 });
 
 test("scaffoldCodexPlugin writes plugin files and marketplace entry", async () => {

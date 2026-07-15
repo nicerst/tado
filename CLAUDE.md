@@ -24,9 +24,14 @@ tado list                                    # print bundled skill names
 | **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹ |
 | **deliberation** | `the-council` |
 | **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
+| **dev-workflow** | `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `fable-mode`, `goal-file-orchestration-prompt`, `in-house-ai-consultant-roadmap`, `phased-app-build-system`, `repo-to-skill`, `yt-to-skill` |
+| **writing** | `humanize-proofreader` |
+| **personal-ops** | `personal-assistant-buildout`, `llm-wiki-builder` |
+| **trading** | `order-flow-trading`, `price-action-market-structure`, `trading-fundamentals`, `trend-pullback-trading` |
 
 > ¹ `opensrc` — Claude only. `allowed-tools` frontmatter ignored by Codex; requires `opensrc` binary.
 > ² `ai-news` — Claude only. Uses `WebSearch` + writes to `raw/website/`; won't function in Codex without equivalent tool wiring.
+> Some `dev-workflow`/`design`/`personal-ops` skills spawn dedicated subagents (`arl-*`, `uiux-*`, `pab-*`, `pabs-*`, etc). Their `.md` files live at `skills/<category>/<skill>/agents/claude/` and are installed into `<target>/agents/` alongside the skill — Codex has no equivalent yet since no `.toml` companions exist for them.
 
 ## Structure
 
