@@ -11,10 +11,15 @@ Turn one video transcript into one installable skill. Methodology in, skill out.
 
 Accept, in order of preference:
 1. Pasted transcript text in the conversation.
-2. File path to a transcript (.txt/.md/.srt/.vtt — strip timestamps/cue numbers first).
+2. File path to a transcript (.txt/.md/.srt/.vtt — strip timestamps/cue numbers first, but keep a timestamp-to-section map if present).
 
 No URL fetching. If user gives only a YouTube URL, ask for the transcript
 (YouTube → "Show transcript" → copy) or suggest `yt-dlp --write-auto-sub`.
+
+## Context gathering (before extraction)
+
+3. If target is this repo (tado) or any repo with `lib/constants.js` `SKILL_NAMES`: grep it for name collisions before naming the skill.
+4. Read the project's skill-groups table (CLAUDE.md) to pick the correct category for the new skill.
 
 ## Extraction rubric
 
@@ -23,6 +28,7 @@ Skill-worthy = repeatable procedure someone could execute without watching the v
 - Decision rules ("if X, do Y"), thresholds, heuristics
 - Anti-patterns the speaker warns against
 - Specific commands, prompts, configs, templates shown
+- Unstated tools/assumptions/warnings the speaker relies on but never says outright
 
 NOT skill-worthy (drop it):
 - Speaker bio, sponsor reads, channel plugs, filler stories
@@ -43,9 +49,20 @@ say so and stop — do not force a skill out of a summary.
    ask the user rather than assuming.
 4. Check `<target-dir>/<name>/` doesn't already exist; if it does, propose
    updating it instead of overwriting.
-5. Write `<target-dir>/<name>/SKILL.md` using the template below.
-6. Report: skill name, target path, one-line summary, trigger phrase, what
-   was dropped as non-skill-worthy.
+5. Write `<target-dir>/<name>/SKILL.md` using the template below (draft).
+6. **Evaluator pass**: re-read the draft against the source transcript.
+   Flag any invented content (not traceable to transcript) or dropped
+   content (explicit steps/rules present in transcript but missing from
+   draft). Revise draft to fix. Do not skip this even for short transcripts.
+7. If target repo has `lib/constants.js` `SKILL_NAMES`/`SKILL_GROUPS`
+   (e.g. tado): append the new skill name to both, in the correct category.
+   Skip silently if the file doesn't exist — this is tado-specific, not a
+   general requirement.
+8. Append one line to `<target-dir>/.yt-to-skill-log.md` (create if absent):
+   `- <date> | <skill-name> | <video title/source>`. Local audit trail,
+   not a memory-system write.
+9. Report: skill name, target path, one-line summary, trigger phrase, what
+   was dropped as non-skill-worthy, and evaluator-pass findings (if any).
 
 ## Output template
 
@@ -71,7 +88,7 @@ description: <what it does + when to use, with 2-3 trigger phrases. This line de
 <Only if transcript contained concrete examples/commands/prompts — never invent them.>
 
 ---
-Source: <video title> — <channel> (<URL if known>)
+Source: <video title> — <channel> (<URL if known>)[, <timestamp> if traceable]
 ```
 
 Rules for the generated skill:
