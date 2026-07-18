@@ -24,7 +24,7 @@ tado list                                    # print bundled skill names
 | **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹, `craft-prompt` |
 | **deliberation** | `the-council` |
 | **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
-| **dev-workflow** | `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `fable-mode`, `goal-file-orchestration-prompt`, `in-house-ai-consultant-roadmap`, `phased-app-build-system`, `repo-to-skill`, `yt-to-skill` |
+| **dev-workflow** | `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `fable-mode`, `goal-file-orchestration-prompt`, `herder-agent-workspace`, `in-house-ai-consultant-roadmap`, `phased-app-build-system`, `repo-to-skill`, `yt-to-skill` |
 | **writing** | `humanize-proofreader` |
 | **personal-ops** | `personal-assistant-buildout`, `llm-wiki-builder` |
 | **trading** | `order-flow-trading`, `price-action-market-structure`, `trading-fundamentals`, `trend-pullback-trading` |
