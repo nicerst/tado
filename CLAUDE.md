@@ -21,7 +21,7 @@ tado list                                    # print bundled skill names
 | **lifecycle** | `apcp`, `project-init`, `project-mid`, `feature-init`, `ralph`, `memory-writer` |
 | **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright` |
 | **design** | `frontend`, `ai-ui-design` |
-| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹ |
+| **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹, `craft-prompt` |
 | **deliberation** | `the-council` |
 | **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
 | **dev-workflow** | `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `fable-mode`, `goal-file-orchestration-prompt`, `in-house-ai-consultant-roadmap`, `phased-app-build-system`, `repo-to-skill`, `yt-to-skill` |
