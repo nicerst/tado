@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tado skill guide</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --surface: #ffffff; --surface-2: #fafbfc; --text: #16171a; --muted: #6b6f76;
+    --border: #e3e5e9; --accent: #2f6feb; --accent-soft: #e8f0fe;
+    --chip-bg: #eef1f6; --shadow: 0 1px 3px rgba(16,24,40,.06), 0 1px 2px rgba(16,24,40,.04);
+    --shadow-hover: 0 4px 14px rgba(16,24,40,.10);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1013; --surface: #1a1b1f; --surface-2: #202126; --text: #edeef0; --muted: #9a9da3;
+    --border: #2c2d33; --accent: #6ea8ff; --accent-soft: #1c2b45;
+    --chip-bg: #26272d; --shadow: 0 1px 3px rgba(0,0,0,.4); --shadow-hover: 0 6px 18px rgba(0,0,0,.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1013; --surface: #1a1b1f; --surface-2: #202126; --text: #edeef0; --muted: #9a9da3;
+      --border: #2c2d33; --accent: #6ea8ff; --accent-soft: #1c2b45;
+      --chip-bg: #26272d; --shadow: 0 1px 3px rgba(0,0,0,.4); --shadow-hover: 0 6px 18px rgba(0,0,0,.5);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background .2s ease, color .2s ease;
+  }
+  .shell { max-width: 1520px; margin: 0 auto; padding: 0 24px 60px; }
+  @media (max-width: 640px) { .shell { padding: 0 12px 40px; } }
+
+  /* ---- Top bar (sticky) ---- */
+  .topbar {
+    position: sticky; top: 0; z-index: 20; background: var(--bg);
+    padding: 18px 0 12px; border-bottom: 1px solid transparent;
+  }
+  .topbar.scrolled { border-bottom-color: var(--border); }
+  .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-emoji { font-size: 26px; }
+  h1 { font-size: 20px; margin: 0; }
+  .sub { color: var(--muted); font-size: 13px; margin: 2px 0 0; }
+  .tabs { display: flex; gap: 6px; background: var(--surface-2); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+  .tab-btn {
+    border: none; background: transparent; color: var(--muted); font-size: 13.5px; font-weight: 600;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all .15s ease;
+  }
+  .tab-btn.active { background: var(--accent); color: #fff; }
+  .icon-btn {
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+    border-radius: 10px; width: 38px; height: 38px; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: transform .15s ease;
+  }
+  .icon-btn:hover { transform: scale(1.08); }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 18px; margin: 16px 0 18px; font-size: 13.5px; color: var(--muted);
+  }
+  .callout b { color: var(--text); }
+  .callout code { background: var(--chip-bg); padding: 1px 6px; border-radius: 5px; color: var(--text); }
+
+  .search-wrap { position: relative; margin: 4px 0 12px; }
+  #q {
+    width: 100%; padding: 13px 42px 13px 16px; border-radius: 12px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); font-size: 15px; transition: border-color .15s ease;
+  }
+  #q:focus { outline: none; border-color: var(--accent); }
+  .kbd-hint {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; color: var(--muted); background: var(--chip-bg);
+    padding: 2px 6px; border-radius: 5px; pointer-events: none;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 16px; }
+  .chip {
+    display: flex; align-items: center; gap: 5px; background: var(--chip-bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 999px; padding: 6px 13px; font-size: 12.5px;
+    cursor: pointer; user-select: none; transition: all .15s ease;
+  }
+  .chip:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .chip.active { background: var(--cat-color, var(--accent)); color: #fff; border-color: transparent; }
+
+  .count { color: var(--muted); font-size: 12.5px; margin: 0 0 14px; }
+
+  .grid {
+    display: grid; gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--cat-color, var(--accent));
+    border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); cursor: pointer;
+    transition: box-shadow .15s ease, transform .15s ease;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+  .card-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-icon { font-size: 17px; }
+  .name { font-weight: 650; font-size: 14.5px; flex: 1; }
+  .cat-tag {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .04em; color: #fff;
+    background: var(--cat-color, var(--accent)); padding: 3px 8px; border-radius: 5px;
+  }
+  .use { margin: 8px 0 0; font-size: 13.5px; color: var(--text); }
+  .trig-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; max-height: 0; overflow: hidden; transition: max-height .2s ease, margin-top .2s ease; }
+  .card.open .trig-row { max-height: 200px; margin-top: 10px; }
+  .trig-pill {
+    font-size: 11.5px; background: var(--chip-bg); border: 1px solid var(--border); color: var(--muted);
+    padding: 3px 9px; border-radius: 999px; cursor: pointer; transition: all .15s ease;
+  }
+  .trig-pill:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  .trig-pill.copied { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .expand-hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  .empty { text-align: center; color: var(--muted); padding: 50px 0; font-size: 14px; }
+
+  /* ---- Workflow tab ---- */
+  .flow { max-width: 900px; margin: 10px 0 0; }
+  .flow-intro { color: var(--muted); font-size: 13.5px; margin: 0 0 22px; }
+  .steps { position: relative; padding-left: 34px; }
+  .steps::before {
+    content: ""; position: absolute; left: 13px; top: 6px; bottom: 6px; width: 2px; background: var(--border);
+  }
+  .step { position: relative; margin-bottom: 12px; }
+  .step-num {
+    position: absolute; left: -34px; top: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--cat-color, var(--accent)); color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow);
+  }
+  .step-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 18px; cursor: pointer; box-shadow: var(--shadow); transition: box-shadow .15s ease;
+  }
+  .step-card:hover { box-shadow: var(--shadow-hover); }
+  .step-head { display: flex; align-items: center; gap: 10px; }
+  .step-title { font-weight: 650; font-size: 14.5px; flex: 1; }
+  .step-cmd { font-size: 12px; background: var(--chip-bg); padding: 3px 8px; border-radius: 6px; color: var(--accent); }
+  .step-chevron { color: var(--muted); transition: transform .15s ease; font-size: 12px; }
+  .step.open .step-chevron { transform: rotate(90deg); }
+  .step-body { max-height: 0; overflow: hidden; transition: max-height .25s ease; font-size: 13.5px; }
+  .step.open .step-body { max-height: 400px; margin-top: 10px; }
+  .step-body ul { margin: 4px 0; padding-left: 18px; }
+  .step-body li { margin: 4px 0; }
+  .detours { margin-top: 30px; }
+  .detours h3 { font-size: 15px; margin: 0 0 10px; }
+  .detour-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .detour-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; font-size: 13px;
+  }
+  .detour-card b { display: block; margin-bottom: 3px; font-size: 13.5px; }
+  .detour-card span { color: var(--muted); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar" id="topbar">
+    <div class="topbar-row">
+      <div class="brand">
+        <span class="brand-emoji">🧭</span>
+        <div>
+          <h1>tado skill guide</h1>
+          <p class="sub">Find the right skill. See the whole workflow.</p>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="tabs">
+          <button class="tab-btn active" data-view="browse">Browse Skills</button>
+          <button class="tab-btn" data-view="flow">Project Workflow</button>
+        </div>
+        <button class="icon-btn" id="themeBtn" title="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BROWSE VIEW ================= -->
+  <div class="view active" id="view-browse">
+    <div class="callout">
+      <b>Start here:</b> for anything project-lifecycle-shaped, the backbone is
+      <code>project-init</code> → <code>feature-init</code> → <code>project-mid</code> → <code>ralph</code>.
+      Click <b>Project Workflow</b> above for the step-by-step version. Everything below fills in around that backbone
+      or covers a different job entirely (research, design, trading, writing).
+    </div>
+
+    <div class="search-wrap">
+      <input id="q" type="text" placeholder="Search by name, task, or trigger phrase…" autocomplete="off">
+      <span class="kbd-hint">/</span>
+    </div>
+    <div class="chips" id="chips"></div>
+    <p class="count" id="count"></p>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">No skills match. Try a different word or clear the filter.</div>
+  </div>
+
+  <!-- ================= WORKFLOW VIEW ================= -->
+  <div class="view" id="view-flow">
+    <div class="flow">
+      <p class="flow-intro">The actual lifecycle, in order. Click a step to see what happens inside it. This is the same backbone <code>project-init</code>, <code>feature-init</code>, <code>project-mid</code>, and <code>ralph</code> already wire together — laid out so you can see the whole shape at once.</p>
+      <div class="steps" id="steps"></div>
+
+      <div class="detours">
+        <h3>Optional detours (use anytime, not fixed to one step)</h3>
+        <div class="detour-grid" id="detours"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Category theming ---------- */
+const CAT_META = {
+  "lifecycle":        { icon: "🔄", color: "#2f6feb" },
+  "engineering":       { icon: "🛠️", color: "#0f9d58" },
+  "design":            { icon: "🎨", color: "#e8618c" },
+  "research":          { icon: "🔍", color: "#8a5cf5" },
+  "deliberation":      { icon: "⚖️", color: "#c9861f" },
+  "utilities":         { icon: "🧰", color: "#5b6472" },
+  "dev-workflow":      { icon: "🚀", color: "#1f9bcf" },
+  "writing":           { icon: "✍️", color: "#c14f4f" },
+  "personal-ops":      { icon: "🧑‍💼", color: "#3f8f6f" },
+  "trading":           { icon: "📈", color: "#d1901f" },
+};
+
+/* ---------- Skill data ---------- */
+const SKILLS = [
+  { name: "apcp", cat: "lifecycle", use: "Start or end a session from documentation, not memory. Session-start orients you (loop/DX/debt check); handoff captures state + commits before context runs out; reset does a full refresh.", trig: ["/apcp", "session start protocol", "update handoff"] },
+  { name: "project-init", cat: "lifecycle", use: "Bootstrap any new project from zero — PRD → grill → scaffold → harness → memory. Also for onboarding an existing project with no .claude/ harness.", trig: ["/project-init", "new project", "no harness yet"] },
+  { name: "project-mid", cat: "lifecycle", use: "Day 30+ checkpoint. Scope has drifted, stories pile up but nothing ships, or you're about to hand off to ralph for an unattended run.", trig: ["/project-mid", "scope drifted", "before ralph handoff"] },
+  { name: "feature-init", cat: "lifecycle", use: "Before building any feature that isn't a one-line fix — turns a description into a scoped plan + ralph-ready story. Skip for single-file changes under 30 lines.", trig: ["/feature-init", "new feature", "unclear requirements"] },
+  { name: "ralph", cat: "lifecycle", use: "Autonomous overnight/unattended build loop. Feed it a prd.json; it implements one story per iteration until all pass or it stalls.", trig: ["/ralph", "overnight run", "unattended implementation"] },
+  { name: "memory-writer", cat: "lifecycle", use: "End of a session where real decisions were made. Captures the WHY (not what — code already shows that) so the next session doesn't re-derive it.", trig: ["/memory-writer", "end of session", "capture decisions"] },
+
+  { name: "harness-engineer", cat: "engineering", use: "Audit or build a project's .claude/ setup — hooks, AGENTS.md, settings.json. Use standalone, or it's auto-invoked by project-init.", trig: ["/harness-engineer", "audit harness", "missing hooks"] },
+  { name: "agentic-engineering", cat: "engineering", use: "Not a workflow — a doctrine. Read when deciding HOW to work: classify tasks as procedure (harness it) vs judgment (let the model handle it), keep work units small and verifiable.", trig: ["procedure vs judgment", "working style", "cost discipline"] },
+  { name: "loop-engineering", cat: "engineering", use: "Designing or auditing any autonomous AI loop (cron job, background agent, recurring pipeline). Scaffold mode builds one from scratch; audit mode scores an existing one against 5 failure modes.", trig: ["/loop-engineering", "audit this loop", "scaffold a loop"] },
+  { name: "vapt-init", cat: "engineering", use: "Security posture setup — first time on a project, before a release/audit, or periodic re-run. Whole-project baseline, not a single-file review.", trig: ["/vapt-init", "security baseline", "before external audit"] },
+  { name: "playwright", cat: "engineering", use: "Any E2E web testing task, or wiring an AI agent to control a real browser (MCP).", trig: ["/playwright", "E2E test", "browser automation for agents"] },
+
+  { name: "frontend", cat: "design", use: "Building, animating, or polishing frontend UI. Handles implementation quality (animation, anti-slop) — pairs with a design system, doesn't replace one.", trig: ["/frontend", "polish this UI", "animate this component"] },
+  { name: "ai-ui-design", cat: "design", use: "Building a new UI with AI, or adding pages to an existing app. Design-system-first workflow; also has an audit mode for \"why does this look AI-generated.\"", trig: ["build a new UI", "add a page", "audit AI smell"] },
+  { name: "reference-to-design-system", cat: "design", use: "Have a screenshot, Figma file, or URL you want to clone the look of — turns it into a design.md + design.html an agent can follow consistently.", trig: ["turn this screenshot into a design system", "clone this look"] },
+
+  { name: "storm-research", cat: "research", use: "High-stakes research questions — technology comparisons, strategic decisions, anything where one perspective's bias is a real risk. Not for quick lookups.", trig: ["/storm-research", "compare X vs Y", "research this thoroughly"] },
+  { name: "prd-builder", cat: "research", use: "Turn a vague product idea into a structured, engineering-ready PRD. Interview-style, pushes back on vague problem statements.", trig: ["build a PRD", "I have a product idea", "write a product spec"] },
+  { name: "grill-with-docs", cat: "research", use: "Stress-test a plan against your project's own glossary/decisions (CONTEXT.md, ADRs) before committing to it.", trig: ["stress-test this plan", "grill me on this"] },
+  { name: "context7", cat: "research", use: "Writing code against any external library/framework — fetches live docs so you're not hallucinating APIs from stale training data.", trig: ["/context7", "use context7", "library docs"] },
+  { name: "opensrc", cat: "research", use: "Need to read a dependency's actual source code, not just its types/docs — clones it locally at the right version.", trig: ["fetch source for", "how does X work internally"] },
+  { name: "craft-prompt", cat: "research", use: "Writing a one-off prompt for any LLM and want it structured well, or picking between prompt frameworks. Not for deciding WHAT to build — that's the-council.", trig: ["/craft-prompt", "make this prompt better", "how should I prompt this"] },
+
+  { name: "the-council", cat: "deliberation", use: "A real decision with genuine tradeoffs — personal, strategic, or business. Five adversarial voices argue it out, one clear verdict at the end.", trig: ["/the-council", "should I...", "help me decide"] },
+
+  { name: "caveman", cat: "utilities", use: "Want terser, less token-heavy responses. Strips filler while keeping full technical substance.", trig: ["/caveman", "talk like caveman", "less tokens"] },
+  { name: "ai-news", cat: "utilities", use: "Want the latest AI news pulled and saved into your wiki automatically.", trig: ["/ai-news"] },
+  { name: "doc-cleanup", cat: "utilities", use: "A project has accumulated stale .md files nobody's looked at — classifies each as keep/review/delete.", trig: ["clean up docs", "stale markdown files"] },
+
+  { name: "agentic-review-loop", cat: "dev-workflow", use: "Shipping an agent-built feature through a PR — plan → build → AI review-score gate → auto-fix loop until it passes, then merge.", trig: ["ship this feature", "PR got a low review score"] },
+  { name: "agentic-system-design", cat: "dev-workflow", use: "Before locking in architecture for an AI-built app — monorepo vs polyrepo, service boundaries, who owns which data.", trig: ["design the system for my app", "production architecture"] },
+  { name: "claude-code-idea-to-build-loop", cat: "dev-workflow", use: "Non-technical user with one real task/idea — roast it with a council before building, then build the smallest working slice and force real verification before calling it done.", trig: ["roast this idea", "validate before I build"] },
+  { name: "claude-code-website-hacks", cat: "dev-workflow", use: "Building a landing page/website with Claude Code and want it to NOT look generic/AI-vibe-coded.", trig: ["build me a landing page", "make this look less AI-vibe-coded"] },
+  { name: "claude-design-workflow", cat: "dev-workflow", use: "Working in Claude Design specifically (Anthropic's design surface) and want to avoid burning your separate weekly quota there.", trig: ["build this in Claude Design", "running out of Claude Design usage"] },
+  { name: "cloud-agent-build-verify-loop", cat: "dev-workflow", use: "A cloud agent (with computer-use/desktop access) needs to prove a fix actually works — loops until there's a recorded video of success, not just \"agent says done.\"", trig: ["verify this fix with computer use", "cloud agent build loop"] },
+  { name: "fable-mode", cat: "dev-workflow", use: "Want a cheaper model to match frontier-model judgment quality, or need to route a hard problem to the right model/effort level.", trig: ["fable mode", "/fable-mode", "route this to the right model"] },
+  { name: "goal-file-orchestration-prompt", cat: "dev-workflow", use: "A build is too big for one prompt/goal character limit — put the full spec in a file, let the orchestrator plan/delegate/verify unattended.", trig: ["build end-to-end autonomously", "character limit on goal prompt"] },
+  { name: "herder-agent-workspace", cat: "dev-workflow", use: "Running 2+ coding agents across different harnesses at once and losing track of which is doing what.", trig: ["organize multiple agent sessions", "too many terminals"] },
+  { name: "in-house-ai-consultant-roadmap", cat: "dev-workflow", use: "Want to become \"the AI person\" at your current job — audit your own tasks, prove ROI, make it visible, formalize the role.", trig: ["build an AI career at my job", "prove AI ROI to my manager"] },
+  { name: "no-mistakes-review-pipeline", cat: "dev-workflow", use: "Can't review every line of AI-written code yourself — adversarial pre-merge pipeline grounded in the original session's intent, not just the diff.", trig: ["review this before merge", "can't review every line myself"] },
+  { name: "phased-app-build-system", cat: "dev-workflow", use: "Raw app idea → shipped product, structured as ideate → plan → design → build → launch phases, mostly unattended.", trig: ["build and launch this app", "turn this idea into a PRD and roadmap"] },
+  { name: "repo-to-skill", cat: "dev-workflow", use: "Have a GitHub repo you want turned into a reusable Claude Code skill.", trig: ["/repo-to-skill", "convert this repo into a skill"] },
+  { name: "yt-to-skill", cat: "dev-workflow", use: "Have a video transcript with a real teachable methodology in it — extracts the procedure, writes it as an installable skill.", trig: ["/yt-to-skill", "turn this video into a skill"] },
+
+  { name: "humanize-proofreader", cat: "writing", use: "Prose (not code) needs a line-edit pass so it reads naturally human instead of stilted AI phrasing.", trig: ["proofread this", "make this sound human", "line-edit this"] },
+
+  { name: "personal-assistant-buildout", cat: "personal-ops", use: "Want to offload recurring low-decision drudgery (email triage, research briefs, content repurposing) to Claude as a personal assistant.", trig: ["automate my workflow", "build a personal assistant"] },
+  { name: "llm-wiki-builder", cat: "personal-ops", use: "Setting up a Karpathy-style personal knowledge base — Obsidian vault as frontend, Claude as ingest agent.", trig: ["set up an LLM wiki", "build a second brain"] },
+
+  { name: "order-flow-trading", cat: "trading", use: "Want deeper confirmation on a level using footprint / cumulative volume delta / volume profile / absorption.", trig: ["/order-flow-trading", "read the footprint", "check CVD"] },
+  { name: "price-action-market-structure", cat: "trading", use: "Reading charts via structure / swings / support-resistance without heavy indicators.", trig: ["/price-action-market-structure", "read this chart"] },
+  { name: "trading-fundamentals", cat: "trading", use: "Learning or reviewing the basic discretionary trading workflow — beginner-safe.", trig: ["/trading-fundamentals", "teach me trading basics"] },
+  { name: "trend-pullback-trading", cat: "trading", use: "Want a rule-based trend-pullback entry plan from a chart.", trig: ["/trend-pullback-trading", "find a pullback trade"] },
+];
+
+/* ---------- Workflow steps ---------- */
+const STEPS = [
+  {
+    title: "New project", cmd: "/project-init", cat: "lifecycle",
+    body: ["Classifies the project strategic vs tactical first.",
+           "PRD (prd-builder) → grill (grill-with-docs, blocking) → minimalism gate (ponytail) → scaffold check → design system if frontend (ai-ui-design/frontend) → harness audit (harness-engineer) → optional security baseline (vapt-init) → memory files written (memory-writer)."]
+  },
+  {
+    title: "Plan each feature", cmd: "/feature-init", cat: "lifecycle",
+    body: ["Skip for one-line fixes or single-file changes under 30 lines.",
+           "Minimalism gate first — feature must survive Delete/Reduce/Defer/Reuse/Outsource before it gets planned.",
+           "If the approach is genuinely uncertain: storm-research runs before locking the architecture.",
+           "If it's loop-shaped (cron, batch, retry-until-pass): loop-engineering scaffolds the loop spec.",
+           "If it touches UI: ai-ui-design / frontend set the design system and dials first."]
+  },
+  {
+    title: "Build & verify", cmd: "agentic-review-loop / no-mistakes-review-pipeline / cloud-agent-build-verify-loop", cat: "dev-workflow",
+    body: ["Pick based on what's available:",
+           "agentic-review-loop — PR-based, external review bot scores it, loop until ≥4/5.",
+           "no-mistakes-review-pipeline — no PR bot; cross-model adversarial review grounded in the session's actual intent.",
+           "cloud-agent-build-verify-loop — cloud agent with computer-use; loops until there's a recorded video proving the fix works."]
+  },
+  {
+    title: "Health checkpoint (30+ days)", cmd: "/project-mid", cat: "lifecycle",
+    body: ["Diagnoses drift: shipped vs drifted vs outstanding.",
+           "Checks harness decay, DX≈AX delta, loop health (loop-engineering audit), ponytail debt trend.",
+           "Human decides scope at a blocking gate — nothing auto-absorbed.",
+           "Ends by optionally printing the ralph launch command — never runs it for you."]
+  },
+  {
+    title: "Unattended execution", cmd: "/ralph", cat: "lifecycle",
+    body: ["Only run after project-mid confirms prd.json has objective, mechanically-verifiable ACs.",
+           "Fresh agent per story, one commit per story, stalls flagged for human review rather than burning iterations.",
+           "Running several ralph loops at once? herder-agent-workspace keeps them organized."]
+  },
+  {
+    title: "Close out the session", cmd: "/memory-writer + /apcp", cat: "lifecycle",
+    body: ["memory-writer captures the non-obvious WHY behind decisions made this session.",
+           "apcp writes HANDOFF.md so the next session starts from documentation, not from re-reading this conversation."]
+  },
+];
+
+const DETOURS = [
+  { name: "storm-research", when: "The approach itself is genuinely uncertain — before feature-init locks in an architecture." },
+  { name: "the-council", when: "A real decision has actual tradeoffs, not just an implementation detail." },
+  { name: "vapt-init", when: "Before a release, external audit, or handing the project to someone else." },
+  { name: "harness-engineer", when: "Anytime the .claude/ setup itself needs auditing or fixing, outside the init flow." },
+  { name: "doc-cleanup", when: "Existing project has accumulated stale docs before a harness audit reads them." },
+];
+
+/* ---------- Copy helper (works reliably on file:// too) ---------- */
+function copyText(text, el) {
+  const ta = document.createElement("textarea");
+  ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand("copy"); } catch (e) {}
+  document.body.removeChild(ta);
+  if (el) {
+    el.classList.add("copied");
+    const original = el.textContent;
+    el.textContent = "copied ✓";
+    setTimeout(() => { el.classList.remove("copied"); el.textContent = original; }, 900);
+  }
+}
+
+/* ---------- Browse view ---------- */
+const CATS = [...new Set(SKILLS.map(s => s.cat))];
+let activeCat = "all";
+const chipsEl = document.getElementById("chips");
+const gridEl = document.getElementById("grid");
+const countEl = document.getElementById("count");
+const emptyEl = document.getElementById("empty");
+const qEl = document.getElementById("q");
+
+function renderChips() {
+  const all = ["all", ...CATS];
+  chipsEl.innerHTML = all.map(c => {
+    const meta = CAT_META[c];
+    const style = c === activeCat && meta ? ` style="--cat-color:${meta.color}"` : "";
+    return `<span class="chip${c === activeCat ? " active" : ""}" data-cat="${c}"${style}>${meta ? meta.icon + " " : "🗂️ "}${c === "all" ? "All" : c}</span>`;
+  }).join("");
+  chipsEl.querySelectorAll(".chip").forEach(el => {
+    el.addEventListener("click", () => { activeCat = el.dataset.cat; render(); });
+  });
+}
+
+function renderBrowse() {
+  const q = qEl.value.trim().toLowerCase();
+  const filtered = SKILLS.filter(s => {
+    if (activeCat !== "all" && s.cat !== activeCat) return false;
+    if (!q) return true;
+    const hay = (s.name + " " + s.use + " " + s.trig.join(" ") + " " + s.cat).toLowerCase();
+    return hay.includes(q);
+  });
+
+  countEl.textContent = `${filtered.length} of ${SKILLS.length} skills`;
+  emptyEl.style.display = filtered.length ? "none" : "block";
+
+  gridEl.innerHTML = filtered.map((s, i) => {
+    const meta = CAT_META[s.cat] || { icon: "🗂️", color: "#888" };
+    return `
+    <div class="card" data-i="${i}" style="--cat-color:${meta.color}">
+      <div class="card-top">
+        <span class="card-icon">${meta.icon}</span>
+        <span class="name">${s.name}</span>
+        <span class="cat-tag">${s.cat}</span>
+      </div>
+      <p class="use">${s.use}</p>
+      <div class="trig-row">
+        ${s.trig.map(t => `<span class="trig-pill" data-copy="${t.replace(/"/g, '&quot;')}">${t}</span>`).join("")}
+      </div>
+      <p class="expand-hint">${"click to " }${"show trigger phrases"}</p>
+    </div>`;
+  }).join("");
+
+  gridEl.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.classList.contains("trig-pill")) {
+        e.stopPropagation();
+        copyText(e.target.dataset.copy, e.target);
+        return;
+      }
+      card.classList.toggle("open");
+    });
+  });
+
+  renderChips();
+}
+function render() { renderBrowse(); }
+qEl.addEventListener("input", render);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && document.activeElement !== qEl && document.getElementById("view-browse").classList.contains("active")) {
+    e.preventDefault(); qEl.focus();
+  }
+  if (e.key === "Escape" && document.activeElement === qEl) { qEl.value = ""; render(); qEl.blur(); }
+});
+
+/* ---------- Workflow view ---------- */
+const stepsEl = document.getElementById("steps");
+stepsEl.innerHTML = STEPS.map((s, i) => {
+  const meta = CAT_META[s.cat] || { icon: "🗂️", color: "#888" };
+  return `
+  <div class="step" data-i="${i}" style="--cat-color:${meta.color}">
+    <div class="step-num">${i + 1}</div>
+    <div class="step-card">
+      <div class="step-head">
+        <span class="step-title">${s.title}</span>
+        <span class="step-cmd">${s.cmd}</span>
+        <span class="step-chevron">▶</span>
+      </div>
+      <div class="step-body"><ul>${s.body.map(b => `<li>${b}</li>`).join("")}</ul></div>
+    </div>
+  </div>`;
+}).join("");
+stepsEl.querySelectorAll(".step").forEach(el => {
+  el.addEventListener("click", () => el.classList.toggle("open"));
+});
+
+const detoursEl = document.getElementById("detours");
+detoursEl.innerHTML = DETOURS.map(d => `
+  <div class="detour-card"><b>${d.name}</b><span>${d.when}</span></div>
+`).join("");
+
+/* ---------- Tabs ---------- */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.getElementById("view-" + btn.dataset.view).classList.add("active");
+  });
+});
+
+/* ---------- Theme toggle ---------- */
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const root = document.documentElement;
+  const current = root.getAttribute("data-theme");
+  root.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+});
+
+/* ---------- Sticky shadow on scroll ---------- */
+const topbar = document.getElementById("topbar");
+window.addEventListener("scroll", () => {
+  topbar.classList.toggle("scrolled", window.scrollY > 4);
+});
+
+render();
+</script>
+</body>
+</html>
