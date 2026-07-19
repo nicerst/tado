@@ -39,15 +39,22 @@ VAPT = Vulnerability Assessment and Penetration Testing. 6-phase sequence (prep 
 | Skill / Repo | Phase | What it does |
 |---|---|---|
 | `agamm/claude-code-owasp` | 1. Preparation | OWASP Top 10:2025, ASVS 5.0, Agentic AI patterns — secure coding reference |
+| `osint-recon-frameworks` (this repo's own skill) | 1. Preparation | recon-ng / spiderfoot / bbot — passive-by-default OSINT reconnaissance on the target's public footprint before scanning begins |
+| `sherlock` (this repo's own skill) | 1. Preparation | Passive username-enumeration OSINT across 400+ sites — footprint mapping, same authorization gate as above |
 | `trailofbits/skills` (Code Audit) | 2. Scanning | CodeQL/SARIF-based SAST, variant analysis |
+| `cloudfox` (this repo's own skill) | 2. Scanning | Cloud attack-surface enumeration (AWS/Azure/GCP) — requires the same live-credential authorization gate as Step 0, since it queries real cloud APIs |
+| `nuclei` (this repo's own skill) | 2. Scanning | Template-based vulnerability scanning — conservative defaults (150 req/s), no built-in authorization gate, same Step 0 gate applies |
 | `snyk/studio-recipes` (Snyk Fix) | 3. Remediation | scan → analyze → fix → validate → PR |
 | `trilwu/secskills`, `Eyadkelleh/awesome-claude-skills-security` | 4. Testing (gated) | recon, enumeration, exploitation, privesc, persistence, fuzzing/CTF agents |
 | `dralgorhythm/claude-agentic-framework` | 5. Documentation | STRIDE threat modeling, compliance framing |
+| `bloodhound` (this repo's own skill) | 5. Documentation | AD/Azure attack-path analysis and visualization — analysis-only, does NOT itself collect from a live domain/tenant (SharpHound/AzureHound do that, separate tools, out of scope) |
 | Snyk Learning Path | 5. Documentation | targeted learning paths per detected stack |
 | `trailofbits/skills` (YARA Authoring) | 6. Detection (optional) | malware/IOC signature rules |
 | `trailofbits/skills` (Smart Contracts) | 2/4 (conditional) | only if Solidity/Solana/etc. detected |
 
 If a phase's tool repo isn't installed in `.claude/`, note it in **Tooling Gaps** (Step 7) — phase still runs using built-in grep/native-tool checks.
+
+**General-purpose utility (not phase-locked):** `cyberchef` (this repo's own skill) — purely client-side decode/transform/analysis tool, usable from any phase to deobfuscate or decode findings (e.g. a payload found during Scanning, or an artifact being written up at Documentation). No live-target interaction, no authorization gate needed.
 
 ---
 
@@ -191,6 +198,8 @@ STOP IF: All scan sources exhausted (dep-audit + security-audit Steps 1-2 + cont
 HARD CAP: This step is time-boxed to current session; no open-ended enumeration
 ```
 
+**3a.5 Tool-invoking skills (delegated):** for any in-scope work covered by `osint-recon-frameworks`, `sherlock`, `cloudfox`, `nuclei`, or `bloodhound`, spawn `Agent(subagent_type="vapt-scan-runner")` per tool needed, passing it the tool name, the confirmed Step 0 target/scope, and the relevant phase. It reads that tool's own SKILL.md and returns candidate findings in the standard table shape — merge its output into 3e like any other source.
+
 **3a. Dependency audit:**
 Run the audit command from Step 1. Parse for high/critical CVEs. If Snyk MCP is configured (`mcp_snyk_snyk_sca_scan`), prefer it and note in Source.
 
@@ -220,7 +229,7 @@ Only CONFIRMED findings enter the findings table.
 `id | severity | finding | location | evidence | recommended_fix | status | source | checker`
 
 - `id` format: `<source-prefix>:<location>:<check-tag>` (deterministic, reproducible across re-runs)
-  - Prefixes: `DEP` (dep-audit), `SA` (security-audit), `S2` (Step 2 spot-check), `SC` (contract scanner)
+  - Prefixes: `DEP` (dep-audit), `SA` (security-audit), `S2` (Step 2 spot-check), `SC` (contract scanner), `OSINT`/`SHRK`/`CFX`/`NUC`/`BH` (vapt-scan-runner tool-invoking skills, per Step 3a.5)
   - Example: `S2:routes/auth.js:42:hardcoded-secret`, `DEP:package.json:lodash`
 - `checker` column: `CONFIRMED` / `FP — <reason>`
 - No raw `|` in cells — escape as `\|` or rephrase. Step 8.5 exporter splits on unescaped `|`.

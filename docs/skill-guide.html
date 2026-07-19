@@ -175,6 +175,7 @@
         <div class="tabs">
           <button class="tab-btn active" data-view="browse">Browse Skills</button>
           <button class="tab-btn" data-view="flow">Project Workflow</button>
+          <button class="tab-btn" data-view="vapt">VAPT Workflow</button>
         </div>
         <button class="icon-btn" id="themeBtn" title="Toggle theme">🌓</button>
       </div>
@@ -212,6 +213,19 @@
       </div>
     </div>
   </div>
+
+  <!-- ================= VAPT VIEW ================= -->
+  <div class="view" id="view-vapt">
+    <div class="flow">
+      <p class="flow-intro">vapt-init's 6-phase security baseline, and where each tool-invoking skill plugs in. The 5 tool skills (osint-recon-frameworks, sherlock, cloudfox, nuclei, bloodhound) are run through one shared subagent, <code>vapt-scan-runner</code> — it reads whichever tool's own SKILL.md, respects that skill's passive/authorization rules, and returns findings in vapt-init's standard table.</p>
+      <div class="steps" id="vapt-steps"></div>
+
+      <div class="detours">
+        <h3>Cross-cutting utility (not phase-locked)</h3>
+        <div class="detour-grid" id="vapt-detours"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -243,6 +257,12 @@ const SKILLS = [
   { name: "loop-engineering", cat: "engineering", use: "Designing or auditing any autonomous AI loop (cron job, background agent, recurring pipeline). Scaffold mode builds one from scratch; audit mode scores an existing one against 5 failure modes.", trig: ["/loop-engineering", "audit this loop", "scaffold a loop"] },
   { name: "vapt-init", cat: "engineering", use: "Security posture setup — first time on a project, before a release/audit, or periodic re-run. Whole-project baseline, not a single-file review.", trig: ["/vapt-init", "security baseline", "before external audit"] },
   { name: "playwright", cat: "engineering", use: "Any E2E web testing task, or wiring an AI agent to control a real browser (MCP).", trig: ["/playwright", "E2E test", "browser automation for agents"] },
+  { name: "osint-recon-frameworks", cat: "engineering", use: "Choosing/driving an OSINT reconnaissance framework — recon-ng (manual, granular), spiderfoot (automated single-sweep), or bbot (recursive, scope-aware). Always run passively by default (-u passive / -rf passive) unless active recon is explicitly authorized.", trig: ["OSINT recon", "subdomain enumeration", "passive recon", "recon-ng", "spiderfoot", "bbot"] },
+  { name: "sherlock", cat: "engineering", use: "Passive username-enumeration OSINT across 400+ sites. Single GET/HEAD/POST per site, no auth/exploitation — but enumerating one username everywhere is itself an aggregate-privacy consideration.", trig: ["sherlock", "find accounts by username", "OSINT username search"] },
+  { name: "cloudfox", cat: "engineering", use: "Cloud attack-surface enumeration across AWS/Azure/GCP using live credentials you already hold. Requires explicit authorization to assess the account — having valid creds isn't the same as having permission.", trig: ["cloudfox", "AWS attack surface enumeration", "cloud pentest recon", "cape privesc path"] },
+  { name: "nuclei", cat: "engineering", use: "Template-based vulnerability scanning (YAML templates, auto-updated). Conservative defaults (150 req/s, 25 concurrency); scope-expanding flags (uncover, scan-all-ips) are opt-in only, never default.", trig: ["nuclei", "vulnerability scanning", "CVE template scan"] },
+  { name: "cyberchef", cat: "engineering", use: "Purely client-side data decode/transform/analysis (\"Cyber Swiss Army Knife\") — Base64, XOR, hex, crypto, auto-detect nested encodings. No live-target interaction; usable during any phase, not locked to one.", trig: ["cyberchef", "decode base64", "deobfuscate this data", "CTF crypto challenge"] },
+  { name: "bloodhound", cat: "engineering", use: "Install/operate the BloodHound CE analysis server for AD/Azure attack-path visualization. Analysis-only — does NOT collect live domain/tenant data itself (SharpHound/AzureHound do that, separate out-of-scope tools).", trig: ["bloodhound", "Active Directory attack path analysis", "install BloodHound CE"] },
 
   { name: "frontend", cat: "design", use: "Building, animating, or polishing frontend UI. Handles implementation quality (animation, anti-slop) — pairs with a design system, doesn't replace one.", trig: ["/frontend", "polish this UI", "animate this component"] },
   { name: "ai-ui-design", cat: "design", use: "Building a new UI with AI, or adding pages to an existing app. Design-system-first workflow; also has an audit mode for \"why does this look AI-generated.\"", trig: ["build a new UI", "add a page", "audit AI smell"] },
@@ -327,6 +347,46 @@ const STEPS = [
     body: ["memory-writer captures the non-obvious WHY behind decisions made this session.",
            "apcp writes HANDOFF.md so the next session starts from documentation, not from re-reading this conversation."]
   },
+];
+
+const VAPT_STEPS = [
+  {
+    title: "Scope & authorization gate", cmd: "vapt-init Step 0 (blocking)", cat: "engineering",
+    body: ["State target, environment (local/staging/production), and authorization explicitly — every run, no carrying forward from last time.",
+           "Production target → Testing phase disabled, no exceptions. No/unclear authorization → hard stop before Phase 1."]
+  },
+  {
+    title: "Preparation", cmd: "Step 2 + osint-recon-frameworks + sherlock", cat: "engineering",
+    body: ["OWASP spot-checks, DX security signal (strict types at auth boundaries), ponytail complexity audit on security-critical paths.",
+           "osint-recon-frameworks (recon-ng/spiderfoot/bbot) and sherlock map the target's public/OSINT footprint — passive-by-default, via the vapt-scan-runner subagent."]
+  },
+  {
+    title: "Scanning", cmd: "Step 3 + cloudfox + nuclei", cat: "engineering",
+    body: ["Dependency audit (npm/pip/go/cargo/etc.) + security-audit SAST, same as before.",
+           "cloudfox adds cloud attack-surface enumeration (AWS/Azure/GCP) — requires live-credential authorization, same Step 0 gate.",
+           "nuclei adds template-based vulnerability scanning — conservative defaults, no scope-expansion without explicit authorization.",
+           "Maker-Checker: every 🔴/🟠 candidate gets a verification pass before entering the findings table — CONFIRMED or FALSE POSITIVE, never both sides skipped."]
+  },
+  {
+    title: "Remediation", cmd: "Step 4", cat: "engineering",
+    body: ["Dependency CVEs with a non-breaking patch: auto-fix, run tests, revert on failure.",
+           "Code-pattern findings (auth, secrets, XSS): never auto-fixed — flagged for manual review only."]
+  },
+  {
+    title: "Testing (gated, opt-in, non-prod only)", cmd: "Step 6", cat: "engineering",
+    body: ["Skipped by default. Only runs if authorization=yes AND environment≠production AND user explicitly says proceed.",
+           "Scoped to recon/enumeration only when it does run — no exploitation, no privesc, no persistence against shared infra."]
+  },
+  {
+    title: "Documentation", cmd: "Step 5 + bloodhound", cat: "engineering",
+    body: ["STRIDE threat model snapshot on components with confirmed findings, plus auth/external-API surface.",
+           "bloodhound visualizes AD/Azure attack paths from already-collected graph data — analysis only. It does NOT collect live domain/tenant data itself; that's SharpHound/AzureHound, separate tools outside this skill's scope."]
+  },
+];
+
+const VAPT_DETOURS = [
+  { name: "cyberchef", when: "Decode/deobfuscate a payload or artifact found at any phase — client-side only, no live-target interaction, usable anywhere in the flow." },
+  { name: "vapt-scan-runner (subagent)", when: "The shared delegate for all 5 tool-invoking skills above — reads the target skill's own SKILL.md, enforces its passive/authorization rules, returns findings in vapt-init's standard table. Never performs the checker pass itself." },
 ];
 
 const DETOURS = [
@@ -425,31 +485,39 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && document.activeElement === qEl) { qEl.value = ""; render(); qEl.blur(); }
 });
 
-/* ---------- Workflow view ---------- */
-const stepsEl = document.getElementById("steps");
-stepsEl.innerHTML = STEPS.map((s, i) => {
-  const meta = CAT_META[s.cat] || { icon: "🗂️", color: "#888" };
-  return `
-  <div class="step" data-i="${i}" style="--cat-color:${meta.color}">
-    <div class="step-num">${i + 1}</div>
-    <div class="step-card">
-      <div class="step-head">
-        <span class="step-title">${s.title}</span>
-        <span class="step-cmd">${s.cmd}</span>
-        <span class="step-chevron">▶</span>
+/* ---------- Workflow view (reusable for any step-timeline tab) ---------- */
+function renderSteps(containerId, stepsData) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = stepsData.map((s, i) => {
+    const meta = CAT_META[s.cat] || { icon: "🗂️", color: "#888" };
+    return `
+    <div class="step" data-i="${i}" style="--cat-color:${meta.color}">
+      <div class="step-num">${i + 1}</div>
+      <div class="step-card">
+        <div class="step-head">
+          <span class="step-title">${s.title}</span>
+          <span class="step-cmd">${s.cmd}</span>
+          <span class="step-chevron">▶</span>
+        </div>
+        <div class="step-body"><ul>${s.body.map(b => `<li>${b}</li>`).join("")}</ul></div>
       </div>
-      <div class="step-body"><ul>${s.body.map(b => `<li>${b}</li>`).join("")}</ul></div>
-    </div>
-  </div>`;
-}).join("");
-stepsEl.querySelectorAll(".step").forEach(el => {
-  el.addEventListener("click", () => el.classList.toggle("open"));
-});
+    </div>`;
+  }).join("");
+  el.querySelectorAll(".step").forEach(stepEl => {
+    stepEl.addEventListener("click", () => stepEl.classList.toggle("open"));
+  });
+}
 
-const detoursEl = document.getElementById("detours");
-detoursEl.innerHTML = DETOURS.map(d => `
-  <div class="detour-card"><b>${d.name}</b><span>${d.when}</span></div>
-`).join("");
+function renderDetours(containerId, detoursData) {
+  document.getElementById(containerId).innerHTML = detoursData.map(d => `
+    <div class="detour-card"><b>${d.name}</b><span>${d.when}</span></div>
+  `).join("");
+}
+
+renderSteps("steps", STEPS);
+renderDetours("detours", DETOURS);
+renderSteps("vapt-steps", VAPT_STEPS);
+renderDetours("vapt-detours", VAPT_DETOURS);
 
 /* ---------- Tabs ---------- */
 document.querySelectorAll(".tab-btn").forEach(btn => {

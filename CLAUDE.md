@@ -19,7 +19,7 @@ tado list                                    # print bundled skill names
 | Group | Skills |
 |-------|--------|
 | **lifecycle** | `apcp`, `project-init`, `project-mid`, `feature-init`, `ralph`, `memory-writer` |
-| **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright` |
+| **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright`, `osint-recon-frameworks`, `cloudfox`, `cyberchef`, `nuclei`, `sherlock`, `bloodhound` |
 | **design** | `frontend`, `ai-ui-design` |
 | **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹, `craft-prompt` |
 | **deliberation** | `the-council` |
