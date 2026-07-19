@@ -42,7 +42,7 @@ lib/install.js       skill + agent copy/symlink logic
 lib/plugin.js        Codex plugin scaffold + marketplace upsert
 lib/constants.js     targets, layouts, skill names — single source of truth
 lib/fs-utils.js      ensureDir / copyOrSymlink / readJson / writeJson
-skills/              22 SKILL.md bundles (installed verbatim)
+skills/              51 SKILL.md bundles (installed verbatim)
 agents/codex/        harness-engineer.toml
 agents/claude/       harness-engineer.md
 test/cli.test.js     integration tests (no mocks)

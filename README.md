@@ -2,7 +2,7 @@
 
 Portable lifecycle skill bundle for Codex-style agent workflows.
 
-Bundled skills (41):
+Bundled skills (51):
 
 | Group | Skills |
 |-------|--------|
@@ -54,7 +54,7 @@ cd tado
 node bin/tado.js install --target claude,codex
 ```
 
-No `npm install` needed — zero external deps. Re-running the same command after `git pull` updates skills already on disk; add `--force` to overwrite unconditionally, or install with `--mode symlink` once so future `git pull`s update in place with no re-install step.
+No `npm install` needed — zero external deps. Re-running the same command after `git pull` updates skills already on disk, or install with `--mode symlink` once so future `git pull`s update in place with no re-install step.
 
 Cursor note:
 - This package installs user skills into `~/.cursor/skills`.
