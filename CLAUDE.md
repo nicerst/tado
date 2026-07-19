@@ -26,7 +26,7 @@ tado list                                    # print bundled skill names
 | **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
 | **dev-workflow** | `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `cloud-agent-build-verify-loop`, `fable-mode`, `goal-file-orchestration-prompt`, `herder-agent-workspace`, `in-house-ai-consultant-roadmap`, `no-mistakes-review-pipeline`, `phased-app-build-system`, `repo-to-skill`, `yt-to-skill` |
 | **writing** | `humanize-proofreader` |
-| **personal-ops** | `personal-assistant-buildout`, `llm-wiki-builder` |
+| **personal-ops** | `personal-assistant-buildout`, `llm-wiki-builder`, `personal-web-cleanup` |
 | **trading** | `order-flow-trading`, `price-action-market-structure`, `trading-fundamentals`, `trend-pullback-trading` |
 
 > ¹ `opensrc` — Claude only. `allowed-tools` frontmatter ignored by Codex; requires `opensrc` binary.
