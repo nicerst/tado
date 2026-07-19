@@ -22,6 +22,10 @@ Named after Ralph Wiggum — not smart, but keeps going.
 
 ---
 
+## Entry guard
+
+If `prd.json` is missing, or exists with zero open (`passes: false`) stories, stop — don't fabricate work to fill the loop. Run `/feature-init` for new work, or `/project-mid` to refresh scope, first.
+
 ## How It Works
 
 ```

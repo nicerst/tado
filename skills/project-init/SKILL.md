@@ -29,6 +29,10 @@ Optional flags:
 
 ---
 
+## Entry guard
+
+If `.claude/project-dna.md` already exists, this project is already initialized. Confirm intent before proceeding: re-init on purpose (`/project-init existing` or `/project-init harness-only`), or did you mean `/feature-init` for new feature work on an already-bootstrapped project?
+
 ## Steps (execute in order)
 
 ### Step 0 — Load skill index

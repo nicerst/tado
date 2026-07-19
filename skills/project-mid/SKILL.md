@@ -27,6 +27,10 @@ Day 30+ checkpoint. Diagnose drift, audit loop and harness health, recalibrate s
 
 ---
 
+## Entry guard
+
+If no harness exists yet (`.claude/project-dna.md` missing), this isn't a mid-project checkpoint — redirect to `/project-init`. If the project is under 30 days old with no drift signals, redirect to `/feature-init` instead.
+
 ## Steps (execute in order)
 
 ### Step 1 — Context read

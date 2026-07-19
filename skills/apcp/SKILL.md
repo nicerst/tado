@@ -139,6 +139,16 @@ Classify modules: **completed / in-progress / blocked / debt**.
 
 Never write code before completing steps 1–5.
 
+### Step 6.5 — Route recommendation
+
+Based on what Steps 1–6 just read, state which backbone skill fits this session — recommendation only, never auto-invoke:
+
+- No `.claude/project-dna.md` found → `/project-init`
+- `prd.json` exists with open (`passes: false`) stories and the ask is "continue/resume/keep going" → `/ralph`
+- `project-dna.md` exists and `last_init`/`last_mid` is 30+ days ago, or ponytail/loop signals show drift → `/project-mid`
+- Harness exists, no drift signal, new feature work being described → `/feature-init`
+- None of the above (a one-off question, a detour skill named directly) → no recommendation needed
+
 ### Step 7 — Orient output
 
 ```
@@ -161,6 +171,7 @@ _[YYYY-MM-DD HH:MM] — session-start_
 **Open Questions:** [only if required — one per line]
 
 **Priority for this session:** [inferred from HANDOFF.md next steps]
+**Recommended next skill:** [from Step 6.5 — omit line if none applies]
 ```
 
 Ask clarifying questions only if required. One question at most. Do not enumerate options the user didn't ask about.

@@ -42,6 +42,10 @@ Turn a feature description into a structured implementation plan and ralph-ready
 
 ---
 
+## Entry guard
+
+If no `.claude/project-dna.md` and no harness exist yet, stop: run `/project-init` first. Planning a feature on an unbootstrapped repo wastes the plan — there's no scaffold, harness, or project context for it to anchor to.
+
 ## Phase 0 — Intake + Minimalism Gate
 
 **Step A — Feature Read:**
