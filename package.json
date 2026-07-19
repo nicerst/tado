@@ -4,7 +4,7 @@
   "description": "Portable lifecycle skill bundle with install flows for Codex, .agents, Claude-style, Cursor-style, and Codex plugin scaffolding.",
   "type": "module",
   "bin": {
-    "tado": "./bin/tado.js"
+    "tado": "bin/tado.js"
   },
   "files": [
     ".codex-plugin",
