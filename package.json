@@ -12,6 +12,7 @@
     "bin",
     "lib",
     "skills",
+    "!skills/.yt-to-skill-log.md",
     "README.md",
     "LICENSE"
   ],
