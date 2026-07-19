@@ -160,7 +160,7 @@ If loop_shaped: yes (from Phase 0): add one loop-specific AC:
 
 ## Phase 1.5 — Procedure vs Ability Classification
 
-**From Harness Over Model:** classify each component of this feature before designing anything. Building harness for ability work is the main source of scaffolding that slows future agents.
+**From Harness Over Model:** classify each component of this feature before designing anything. Building harness for ability work is the main source of scaffolding that slows future agents. (This classification is `agentic-engineering`'s procedure/ability/wait doctrine, applied here — see that skill for the full rationale.)
 
 For each major component identified in Phase 1:
 
@@ -523,6 +523,8 @@ Minimalism gate still runs on the spec content — check if scope survived the l
 | `/frontend` | Auto-invoked at Phase 0.5 for UI features — sets VARIANCE/MOTION/DENSITY consistent with design system |
 | `/reference-to-design-system` | Auto-invoked at Phase 0.5 when a visual reference exists and no design system yet — alternative to `ai-ui-design`'s from-scratch generation |
 | `/agentic-review-loop` | Invoked at Phase 5 completion for PR-based features — AI review score gate before merge |
+| `/no-mistakes-review-pipeline` | Alternative/companion at Phase 5 — cross-model adversarial review grounded in the originating session's intent, when that fits better than a PR-bot score gate |
+| `/cloud-agent-build-verify-loop` | At Phase 5, when a cloud agent with computer-use is available — recorded-video proof of the fix working, instead of/alongside the manual smoke test |
 
 ---
 

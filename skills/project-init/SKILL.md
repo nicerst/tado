@@ -409,6 +409,8 @@ Expect harness-engineer to label each gap with gap_type: procedure|ability|wait.
 
 **If `.harness-gaps.json` is missing after agent returns:** treat as CRITICAL failure. Surface to user. Do not proceed to Step 5 without this file.
 
+**Optional — security baseline:** alongside this harness audit, `/vapt-init` produces a security-specific baseline (VAPT-BASELINE.md) covering the same procedure/ability/wait classification for vulnerability findings. Non-blocking; offer it here rather than leaving it to be discovered later.
+
 ### Step 5 — TaskCreate for every gap
 
 **5a. Fingerprint-based dedup (re-runs only):**
@@ -501,6 +503,7 @@ Build in priority order: CRITICAL → HIGH → MEDIUM → LOW.
 - Independent procedure gaps: fire parallel `Agent(isolation: "worktree")` calls in single message.
 - Dependent gaps or any gap touching shared files: sequential.
 - Mark each TaskUpdate → in_progress when starting, → completed when done.
+- Running 3+ parallel worktree agents in separate terminals? `herder-agent-workspace` skill covers organizing/monitoring them without losing track of which is which.
 
 **Agent briefing template (required for every spawned agent):**
 

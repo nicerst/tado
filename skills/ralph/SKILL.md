@@ -163,16 +163,16 @@ cat prd.json | jq '.userStories[] | select(.passes == false) | .title'
 git log --oneline
 ```
 
+Running multiple ralph loops across projects at once? `herder-agent-workspace` skill covers organizing/monitoring several agent sessions without losing track of which is which.
+
 ---
 
-## Project-Mid Candidate
+## Project-Mid Integration
 
-Ralph is the execution engine for a planned `project-mid` health-check skill. At day 30+, when a project has accumulated stories and humans need to step back:
+Ralph is the execution engine `project-mid` hands off to. At day 30+, when a project has accumulated stories and humans need to step back:
 1. `/project-mid` recalibrates scope, archives completed stories, surfaces drift
-2. Hands off remaining stories to ralph for autonomous execution
-3. Human reviews and merges ralph's commits
-
-`project-mid` is flagged, not yet built.
+2. `/project-mid` Step 9 confirms `prd.json` has objective ACs and prints the ralph launch command (doesn't run it)
+3. Human runs `ralph.sh`, then reviews and merges ralph's commits
 
 ---
 
