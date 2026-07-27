@@ -149,6 +149,8 @@ Adapt to your stack: `pytest` for Python, `go test ./...` for Go, `cargo test` f
 
 For story-level code review beyond typecheck/test/lint, wire `agentic-review-loop`'s AI review score gate (≥4/5) into the per-iteration CLAUDE.md prompt — the generator (ralph's spawned agent) should not be the one approving its own story as done.
 
+Each ralph iteration is exactly the "hooded senior engineer" scenario `senior-engineer-prompting` describes — fresh context, only the codebase + prd.json + CLAUDE.md to work from, no memory of prior iterations. Write story descriptions and the per-iteration CLAUDE.md prompt with that skill's structure: point at a reference file/pattern instead of describing it from scratch, state the specific behavior instead of a one-line ticket.
+
 ---
 
 ## Monitoring a Run

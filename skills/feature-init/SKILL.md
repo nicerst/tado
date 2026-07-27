@@ -529,6 +529,7 @@ Minimalism gate still runs on the spec content — check if scope survived the l
 | `/agentic-review-loop` | Invoked at Phase 5 completion for PR-based features — AI review score gate before merge |
 | `/no-mistakes-review-pipeline` | Alternative/companion at Phase 5 — cross-model adversarial review grounded in the originating session's intent, when that fits better than a PR-bot score gate |
 | `/cloud-agent-build-verify-loop` | At Phase 5, when a cloud agent with computer-use is available — recorded-video proof of the fix working, instead of/alongside the manual smoke test |
+| `/senior-engineer-prompting` | When writing the prd.json story description or a task brief for a spawned agent — how to structure the prompt so a fresh-context agent doesn't have to guess |
 
 ---
 

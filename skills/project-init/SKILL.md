@@ -508,6 +508,7 @@ Build in priority order: CRITICAL → HIGH → MEDIUM → LOW.
 - Dependent gaps or any gap touching shared files: sequential.
 - Mark each TaskUpdate → in_progress when starting, → completed when done.
 - Running 3+ parallel worktree agents in separate terminals? `herder-agent-workspace` skill covers organizing/monitoring them without losing track of which is which.
+- Writing the brief below? `senior-engineer-prompting` skill covers how to structure it — point at a reference implementation, state the behavior you already have in your head instead of a one-line ticket, don't underspecify.
 
 **Agent briefing template (required for every spawned agent):**
 
