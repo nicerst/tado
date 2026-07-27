@@ -27,7 +27,7 @@ tado list                                    # print bundled skill names
 | **dev-workflow** | `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `cloud-agent-build-verify-loop`, `fable-mode`, `goal-file-orchestration-prompt`, `herder-agent-workspace`, `in-house-ai-consultant-roadmap`, `no-mistakes-review-pipeline`, `phased-app-build-system`, `repo-to-skill`, `senior-engineer-prompting`, `yt-to-skill` |
 | **writing** | `humanize-proofreader` |
 | **personal-ops** | `personal-assistant-buildout`, `llm-wiki-builder`, `personal-web-cleanup` |
-| **trading** | `order-flow-trading`, `price-action-market-structure`, `trading-fundamentals`, `trend-pullback-trading` |
+| **trading** | `kronos-candlestick-forecasting`, `order-flow-trading`, `price-action-market-structure`, `trading-fundamentals`, `trend-pullback-trading` |
 
 > ¹ `opensrc` — Claude only. `allowed-tools` frontmatter ignored by Codex; requires `opensrc` binary.
 > ² `ai-news` — Claude only. Uses `WebSearch` + writes to `raw/website/`; won't function in Codex without equivalent tool wiring.
@@ -42,7 +42,7 @@ lib/install.js       skill + agent copy/symlink logic
 lib/plugin.js        Codex plugin scaffold + marketplace upsert
 lib/constants.js     targets, layouts, skill names — single source of truth
 lib/fs-utils.js      ensureDir / copyOrSymlink / readJson / writeJson
-skills/              52 SKILL.md bundles (installed verbatim)
+skills/              53 SKILL.md bundles (installed verbatim)
 agents/codex/        harness-engineer.toml
 agents/claude/       harness-engineer.md
 test/cli.test.js     integration tests (no mocks)
