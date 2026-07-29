@@ -243,6 +243,7 @@ const CAT_META = {
   "personal-ops":      { icon: "🧑‍💼", color: "#3f8f6f" },
   "trading":           { icon: "📈", color: "#d1901f" },
 };
+CAT_META["media-design"] = { icon: "🎬", color: "#13a8a8" };
 
 /* ---------- Skill data ---------- */
 const SKILLS = [
@@ -309,6 +310,11 @@ const SKILLS = [
   { name: "price-action-market-structure", cat: "trading", use: "Reading charts via structure / swings / support-resistance without heavy indicators.", trig: ["/price-action-market-structure", "read this chart"] },
   { name: "trading-fundamentals", cat: "trading", use: "Learning or reviewing the basic discretionary trading workflow — beginner-safe.", trig: ["/trading-fundamentals", "teach me trading basics"] },
   { name: "trend-pullback-trading", cat: "trading", use: "Want a rule-based trend-pullback entry plan from a chart.", trig: ["/trend-pullback-trading", "find a pullback trade"] },
+  { name: "media-design-bootstrap", cat: "media-design", use: "Router for media/design work. Picks BibiGPT for summaries, watch-video for frame-level inspection, video-toolkit for generated videos, or Open Design for reusable design/plugin workflows.", trig: ["media design bootstrap", "route this media task", "video and design workflow"] },
+  { name: "watch-video-and-answer", cat: "media-design", use: "Analyze a video URL or local screen recording with transcript + sampled frames, then answer with grounded timestamps.", trig: ["watch this video", "summarize this YouTube video", "analyze this screen recording", "/watch"] },
+  { name: "bibigpt-media-workflow", cat: "media-design", use: "Use BibiGPT for video/audio URL summaries, transcripts, chapters, batch synthesis, rewrites, and media library/feed/channel workflows.", trig: ["summarize this video", "extract transcript", "chapterize this podcast", "bibi summarize"] },
+  { name: "video-toolkit-workflow", cat: "media-design", use: "Create explainer, product-demo, launch, sprint-review, or scripted videos through a Remotion-style production loop: brief, script, assets, timing, preview, render.", trig: ["create a video", "generate explainer video", "product demo video", "Remotion AI video workflow"] },
+  { name: "open-design-plugin-authoring", cat: "media-design", use: "Create, validate, or prepare Open Design skills, plugins, templates, design systems, prototypes, decks, videos, or artifact packages.", trig: ["open design plugin", "create Open Design skill", "validate Open Design plugin"] },
 ];
 
 /* ---------- Workflow steps ---------- */
