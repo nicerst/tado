@@ -236,14 +236,22 @@ If frontend framework found:
 1. Invoke `ai-ui-design` skill — design system first, before any page generation. Output: design system spec, tokens, component vocabulary.
    - If user supplies a visual reference (image, Figma file, or URL) instead of a from-scratch brief: invoke `reference-to-design-system` skill instead — produces paired `design.md` + `design.html` + a CLAUDE.md sync rule block.
 2. Invoke `frontend` skill in brief inference mode — set dials (VARIANCE / MOTION / DENSITY) consistent with the design system.
-3. Record design system decisions + dials in `memory/patterns.md` at Step 9.
+3. Invoke `design-bootstrap-workflow` (`/design-bootstrap`) for the first user-facing page or feature UI if the PRD includes one.
+   - Target defaults to the primary landing page, onboarding screen, dashboard, or first feature page named by the PRD.
+   - It creates `design-lab/`, runs the 5-variant → 3-refinement loop, writes manual asset prompts, adds a design-lab-only tweak bar when implementation files exist, and writes `design-lab/REVIEW.md`.
+   - Human choice gates are blocking unless the user explicitly says `agent decide`.
+   - No MCP and no external asset generation. Do not install Impeccable or Taste Skill without approval.
+   - Do not copy the selected design into production routes during project-init unless the user explicitly asks.
+4. Record design system decisions, dials, selected design direction, and any `design-lab/` outputs in `memory/patterns.md` at Step 9.
 
 **Existing project** (`/project-init existing`):
 1. Invoke `ai-ui-design audit` — detect AI smell, missing design system, inconsistent tokens.
 2. Invoke `frontend audit` — scan existing pages for slop patterns.
-3. Surface findings to user at Step 6 scope decision — do not auto-fix.
+3. Invoke `design-bootstrap-workflow` only when the user asked to redesign a specific page/feature during init.
+   - Keep it isolated in `design-lab/`.
+   - Surface findings to user at Step 6 scope decision — do not auto-fix or touch production UI.
 
-This step is fast (2–5 min). Skipping it means all subsequent UI generation runs without brief context and defaults to category-reflex aesthetics.
+This step is fast if it only sets dials; `/design-bootstrap` is intentionally heavier and may stop at human gates. Skipping it means all subsequent UI generation runs without brief context and defaults to category-reflex aesthetics.
 
 **Data-path veto (non-negotiable):** reject any scaffold where client-side code imports a DB client directly (e.g. frontend importing `pg`, `prisma`, `mongodb` driver). Client talks to an API/service layer, never the DB. Flag and block at this gate, not at code review.
 
@@ -314,6 +322,8 @@ package_manager: npm|pnpm|pip|cargo|...
 VARIANCE: N
 MOTION: N
 DENSITY: N
+design_bootstrap: skipped|design-lab/DESIGN_BOOTSTRAP.md
+selected_design_direction: <variant/refinement name if chosen>
 # Remove this section entirely if no frontend detected at Step 3.5
 
 ## Harness
@@ -618,6 +628,7 @@ Note: `memory/decisions.md` already has checkpoints from Steps 1, 2, and 6. Appe
 **`memory/patterns.md`** — recurring code patterns:
 - Query patterns (parameterization, caching)
 - Component patterns (if frontend: include VARIANCE/MOTION/DENSITY dials from Step 3.5)
+- Design bootstrap output (if Step 3.5 ran `/design-bootstrap`): selected variant/refinement, `design-lab/` paths, tweak-bar decisions, asset prompts, and anti-slop review result
 - API patterns
 - Project-specific conventions
 - Loop patterns — which pattern (solo/maker-checker/manager-helpers) applies to which operation
@@ -765,6 +776,7 @@ Harness budget: N procedure built / N ability skipped / N wait deferred
 
 Hooks built:    [list]
 Skills built:   [list]
+Design lab:     skipped | design-lab/ ready ([selected direction])
 Loop library:   N loops defined [solo: N, maker-checker: N, manager-helpers: N]
 Ponytail debt:  N items open (see .claude/ponytail.md)
 Memory files:   decisions.md, patterns.md, user_prefs.md, ponytail.md
