@@ -46,6 +46,8 @@ Turn a feature description into a structured implementation plan and ralph-ready
 
 If no `.claude/project-dna.md` and no harness exist yet, stop: run `/project-init` first. Planning a feature on an unbootstrapped repo wastes the plan — there's no scaffold, harness, or project context for it to anchor to.
 
+If the feature request is too large, foggy, or cross-cutting to reduce to one feature plan in this session, stop: run `/wayfinder` first. `wayfinder` should produce decision tickets until one takeable feature can return to `/feature-init`.
+
 ## Phase 0 — Intake + Minimalism Gate
 
 **Step A — Feature Read:**
@@ -520,6 +522,7 @@ Minimalism gate still runs on the spec content — check if scope survived the l
 | `/ralph` | Run feature-init to produce prd.json, then ralph to execute |
 | `/project-init` | project-init bootstraps the project; feature-init plans each subsequent feature |
 | `/project-mid` | project-mid recalibrates scope; feature-init plans next feature after recalibration |
+| `/wayfinder` | Run before feature-init when the request is too broad/foggy for one feature plan; use its resolved decision tickets as feature-init input |
 | `/playwright` | After feature-init produces ACs, playwright writes E2E tests from them |
 | `/ai-ui-design` | Auto-invoked at Phase 0.5 for UI features — design system check/extend before implementation; audit mode for existing UI areas |
 | `/loop-engineering` | Auto-invoked at Phase 3 when loop_shaped: yes — scaffold mode produces complete loop design |

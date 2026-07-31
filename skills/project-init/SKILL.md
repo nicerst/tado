@@ -84,6 +84,8 @@ If `/project-init tactical` flag passed: jump to abbreviated path immediately.
 ```
 Non-blocking. Skip if stack is already decided or obvious from PRD.
 
+**Wayfinder pre-check:** if the idea is too large or foggy to become a PRD in this session, stop and run `/wayfinder` first. `wayfinder` maps issue-tracked decision tickets until the destination is clear enough for `project-init`. Do not replace Step 2 grilling with `wayfinder`; grilling resolves individual decisions, while `wayfinder` orchestrates many decisions across sessions.
+
 ### Step 1 — PRD
 Invoke `prd-builder` skill. Output: draft PRD document.
 - If `/project-init existing`: skip to Step 3.

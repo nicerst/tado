@@ -31,6 +31,8 @@ Day 30+ checkpoint. Diagnose drift, audit loop and harness health, recalibrate s
 
 If no harness exists yet (`.claude/project-dna.md` missing), this isn't a mid-project checkpoint — redirect to `/project-init`. If the project is under 30 days old with no drift signals, redirect to `/feature-init` instead.
 
+If drift has become a huge foggy effort rather than a checkpoint-sized scope decision, redirect to `/wayfinder`. Use `project-mid` to expose drift; use `wayfinder` when the route through that drift needs issue-tracked decision tickets across sessions.
+
 ## Steps (execute in order)
 
 ### Step 1 — Context read

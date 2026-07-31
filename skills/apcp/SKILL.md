@@ -145,6 +145,7 @@ Based on what Steps 1–6 just read, state which backbone skill fits this sessio
 
 - No `.claude/project-dna.md` found → `/project-init`
 - `prd.json` exists with open (`passes: false`) stories and the ask is "continue/resume/keep going" → `/ralph`
+- Ask describes a huge, foggy, multi-session effort where destination/route is not yet clear → `/wayfinder`
 - `project-dna.md` exists and `last_init`/`last_mid` is 30+ days ago, or ponytail/loop signals show drift → `/project-mid`
 - Harness exists, no drift signal, new feature work being described → `/feature-init`
 - None of the above (a one-off question, a detour skill named directly) → no recommendation needed

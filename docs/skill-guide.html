@@ -187,7 +187,7 @@
   <div class="view active" id="view-browse">
     <div class="callout">
       <b>Start here:</b> for anything project-lifecycle-shaped, the backbone is
-      <code>project-init</code> → <code>feature-init</code> → <code>project-mid</code> → <code>ralph</code>.
+      <code>wayfinder</code> → <code>project-init</code> → <code>feature-init</code> → <code>project-mid</code> → <code>ralph</code>.
       Click <b>Project Workflow</b> above for the step-by-step version. Everything below fills in around that backbone
       or covers a different job entirely (research, design, trading, writing).
     </div>
@@ -205,7 +205,7 @@
   <!-- ================= WORKFLOW VIEW ================= -->
   <div class="view" id="view-flow">
     <div class="flow">
-      <p class="flow-intro">The actual lifecycle, in order. Click a step to see what happens inside it. This is the same backbone <code>project-init</code>, <code>feature-init</code>, <code>project-mid</code>, and <code>ralph</code> already wire together — laid out so you can see the whole shape at once.</p>
+      <p class="flow-intro">The actual lifecycle, in order. Click a step to see what happens inside it. This is the same backbone <code>wayfinder</code>, <code>project-init</code>, <code>feature-init</code>, <code>project-mid</code>, and <code>ralph</code> already wire together — laid out so you can see the whole shape at once.</p>
       <div class="steps" id="steps"></div>
 
       <div class="detours">
@@ -249,6 +249,7 @@ CAT_META["media-design"] = { icon: "🎬", color: "#13a8a8" };
 const SKILLS = [
   { name: "apcp", cat: "lifecycle", use: "Start or end a session from documentation, not memory. Session-start orients you (loop/DX/debt check); handoff captures state + commits before context runs out; reset does a full refresh.", trig: ["/apcp", "session start protocol", "update handoff"] },
   { name: "aios-audit", cat: "lifecycle", use: "Read-only truth audit for an AIOS, second brain, or agent workspace. Verifies routing docs, indexes, freshness, context bloat, and expertise-vs-situational placement before fixes are approved.", trig: ["/aios-audit", "audit my AIOS", "check routing truth"] },
+  { name: "wayfinder", cat: "lifecycle", use: "Plan work too large or foggy for one agent session as issue-tracked decision tickets. Sits above grilling: tickets may call grill-with-docs, research, prototype, or task work.", trig: ["/wayfinder", "map this effort", "too big for one session"] },
   { name: "project-init", cat: "lifecycle", use: "Bootstrap any new project from zero — PRD → grill → scaffold → harness → memory. Also for onboarding an existing project with no .claude/ harness.", trig: ["/project-init", "new project", "no harness yet"] },
   { name: "project-mid", cat: "lifecycle", use: "Day 30+ checkpoint. Scope has drifted, stories pile up but nothing ships, or you're about to hand off to ralph for an unattended run.", trig: ["/project-mid", "scope drifted", "before ralph handoff"] },
   { name: "feature-init", cat: "lifecycle", use: "Before building any feature that isn't a one-line fix — turns a description into a scoped plan + ralph-ready story. Skip for single-file changes under 30 lines.", trig: ["/feature-init", "new feature", "unclear requirements"] },
@@ -321,6 +322,12 @@ const SKILLS = [
 
 /* ---------- Workflow steps ---------- */
 const STEPS = [
+  {
+    title: "Map huge foggy work", cmd: "/wayfinder", cat: "lifecycle",
+    body: ["Use before project-init or feature-init when the destination is not clear enough to plan in one session.",
+           "Creates an issue-tracked map plus decision tickets; tickets can call grill-with-docs, storm-research, prototype, or manual task work.",
+           "Do not use for small features — go straight to project-init or feature-init."]
+  },
   {
     title: "New project", cmd: "/project-init", cat: "lifecycle",
     body: ["Classifies the project strategic vs tactical first.",
