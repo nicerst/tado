@@ -363,18 +363,20 @@ Ask: "Ready to run ralph autonomously? I'll print the launch command."
 If yes:
 1. Confirm prd.json has at least one `passes: false` story with objective AC.
 2. Confirm all outstanding stories have mechanical stop criteria (not subjective). If any are subjective: flag before handing to ralph — ralph loops don't exit cleanly on subjective criteria.
-3. Confirm `ralph.sh` exists. If not:
+3. For non-trivial production stories, add a post-run merge gate: `no-mistakes-review-pipeline` after ralph commits and before merge. For small docs/demo/obvious fixes, state that the heavy gate is intentionally skipped.
+4. Confirm story descriptions and any ralph prompt edits follow `senior-engineer-prompting`: point at reference files/patterns, state behavior explicitly, and do not hand ralph a one-line ticket.
+5. Confirm `ralph.sh` exists. If not:
    ```bash
    cp $(opensrc path snarktank/ralph)/ralph.sh ./
    chmod +x ralph.sh
    ```
-4. Print launch command — do NOT run it. User owns this invocation.
+6. Print launch command — do NOT run it. User owns this invocation.
    ```bash
    ./ralph.sh --tool claude 10
    # or:
    ./ralph.sh --tool amp 15
    ```
-5. Remind user: ralph uses `--dangerously-skip-permissions`. Run only on branches where that's acceptable. Each ralph iteration is a loop — make sure Loop Library has a ralph entry with hard cap set.
+7. Remind user: ralph uses `--dangerously-skip-permissions`. Run only on branches where that's acceptable. Each ralph iteration is a loop — make sure Loop Library has a ralph entry with hard cap set.
 
 ---
 

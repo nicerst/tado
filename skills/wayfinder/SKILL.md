@@ -79,6 +79,12 @@ Every ticket is either **HITL** — human in the loop, worked *with* a human who
 - **Grilling** (HITL): Conversation via the /grilling and /domain-modeling skills, one question at a time. The default case.
 - **Task** (HITL or AFK): Manual work that must happen before a *decision* can be made — nothing to decide, prototype, or research, but the discussion is blocked until it's done. Signing up for a service so its API can be judged, provisioning access, moving data so its shape can be seen. This is the one type that *does* rather than decides — and it earns its place by unblocking a decision, not by delivering the destination. The agent drives it alone where it can (AFK); otherwise it hands the human a precise checklist (HITL). Resolved when the work is done; the answer records what was done and any resulting facts (credentials location, new URLs, row counts) later tickets depend on.
 
+### TADO lifecycle integration
+
+- Use `senior-engineer-prompting` when a ticket creates a brief for another coding agent: include reference files, explicit behavior, effort level, and expected proof.
+- Use `no-mistakes-review-pipeline` only when the map's Notes explicitly allow execution and the produced AI-written code is non-trivial or production-impacting. It is a pre-merge gate, not a decision ticket substitute.
+- Use `the-council` only to decide ambiguous strategy/risk questions, such as whether a change warrants the heavy review pipeline. Do not use it as a code reviewer.
+
 ## Fog of war
 
 The map is _deliberately_ incomplete: don't chart what you can't yet see. Beyond the live tickets lies the **fog of war** — the dim view of decisions and investigations you can tell are coming but can't yet pin down, because they hang on questions still open. Resolving a ticket clears the fog ahead of it, graduating whatever's now specifiable into fresh tickets — one at a time, until the way to the destination is clear and no tickets remain.

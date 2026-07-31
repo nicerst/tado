@@ -58,6 +58,7 @@ If any advisor or the verdict relies on an assumption that may not hold — flag
 - Council style: direct, specific, no generic observations, disagreement is expected
 - Verdict: always one clear conclusion — The Council does not hedge into "it depends" without explaining what it depends on and why
 - Uncertainty: named explicitly, never hidden in vague language
+- In TADO lifecycle decisions, use `the-council` to decide ambiguous strategy/risk questions: whether to use `wayfinder`, whether a change warrants `no-mistakes-review-pipeline`, or whether a delegation brief needs stronger `senior-engineer-prompting`. Do not use it as a code review or merge gate.
 
 ## EXAMPLES
 

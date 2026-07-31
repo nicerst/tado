@@ -326,6 +326,7 @@ const STEPS = [
     title: "Map huge foggy work", cmd: "/wayfinder", cat: "lifecycle",
     body: ["Use before project-init or feature-init when the destination is not clear enough to plan in one session.",
            "Creates an issue-tracked map plus decision tickets; tickets can call grill-with-docs, storm-research, prototype, or manual task work.",
+           "Agent task/prototype tickets should use senior-engineer-prompting for briefs; execution-heavy maps should use no-mistakes-review-pipeline before merge.",
            "Do not use for small features — go straight to project-init or feature-init."]
   },
   {
@@ -345,7 +346,7 @@ const STEPS = [
     title: "Build & verify", cmd: "agentic-review-loop / no-mistakes-review-pipeline / cloud-agent-build-verify-loop", cat: "dev-workflow",
     body: ["Pick based on what's available:",
            "agentic-review-loop — PR-based, external review bot scores it, loop until ≥4/5.",
-           "no-mistakes-review-pipeline — no PR bot; cross-model adversarial review grounded in the session's actual intent.",
+           "no-mistakes-review-pipeline — non-trivial production AI code; cross-model adversarial review grounded in the originating session's intent.",
            "cloud-agent-build-verify-loop — cloud agent with computer-use; loops until there's a recorded video proving the fix works."]
   },
   {
@@ -358,6 +359,7 @@ const STEPS = [
   {
     title: "Unattended execution", cmd: "/ralph", cat: "lifecycle",
     body: ["Only run after project-mid confirms prd.json has objective, mechanically-verifiable ACs.",
+           "Use senior-engineer-prompting when writing story prompts; run no-mistakes-review-pipeline before merging non-trivial production commits.",
            "Fresh agent per story, one commit per story, stalls flagged for human review rather than burning iterations.",
            "Running several ralph loops at once? herder-agent-workspace keeps them organized."]
   },

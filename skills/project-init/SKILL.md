@@ -564,6 +564,8 @@ OUTPUT REQUIRED: Before returning, write .claude/agent-result-<gap_id>.json:
 
 **Review gate for non-security gaps:** invoke `agentic-review-loop` skill's AI review score gate (≥4/5) as the second-agent evaluator before marking a procedure gap `status: success` — same Generator-vs-Evaluator principle as Maker-Checker, applied to ordinary code changes.
 
+For production-impacting or non-trivial AI-written code where a PR-score gate is not enough, run `no-mistakes-review-pipeline` before merge/readiness. It reviews against the originating intent, not just the diff. Skip for tactical throwaway scaffolds, docs-only edits, and obvious one-file fixes.
+
 **Agent output contract enforcement:**
 After each agent completes, read `.claude/agent-result-<gap_id>.json`:
 - **File missing:** treat as failure. Retry once with `failure_reason: "agent-result.json not written"` in next briefing.
