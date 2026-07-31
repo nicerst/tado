@@ -248,6 +248,7 @@ CAT_META["media-design"] = { icon: "🎬", color: "#13a8a8" };
 /* ---------- Skill data ---------- */
 const SKILLS = [
   { name: "apcp", cat: "lifecycle", use: "Start or end a session from documentation, not memory. Session-start orients you (loop/DX/debt check); handoff captures state + commits before context runs out; reset does a full refresh.", trig: ["/apcp", "session start protocol", "update handoff"] },
+  { name: "aios-audit", cat: "lifecycle", use: "Read-only truth audit for an AIOS, second brain, or agent workspace. Verifies routing docs, indexes, freshness, context bloat, and expertise-vs-situational placement before fixes are approved.", trig: ["/aios-audit", "audit my AIOS", "check routing truth"] },
   { name: "project-init", cat: "lifecycle", use: "Bootstrap any new project from zero — PRD → grill → scaffold → harness → memory. Also for onboarding an existing project with no .claude/ harness.", trig: ["/project-init", "new project", "no harness yet"] },
   { name: "project-mid", cat: "lifecycle", use: "Day 30+ checkpoint. Scope has drifted, stories pile up but nothing ships, or you're about to hand off to ralph for an unattended run.", trig: ["/project-mid", "scope drifted", "before ralph handoff"] },
   { name: "feature-init", cat: "lifecycle", use: "Before building any feature that isn't a one-line fix — turns a description into a scoped plan + ralph-ready story. Skip for single-file changes under 30 lines.", trig: ["/feature-init", "new feature", "unclear requirements"] },
