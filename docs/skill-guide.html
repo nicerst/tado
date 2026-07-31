@@ -267,6 +267,7 @@ const SKILLS = [
   { name: "bloodhound", cat: "engineering", use: "Install/operate the BloodHound CE analysis server for AD/Azure attack-path visualization. Analysis-only — does NOT collect live domain/tenant data itself (SharpHound/AzureHound do that, separate out-of-scope tools).", trig: ["bloodhound", "Active Directory attack path analysis", "install BloodHound CE"] },
 
   { name: "frontend", cat: "design", use: "Building, animating, or polishing frontend UI. Handles implementation quality (animation, anti-slop) — pairs with a design system, doesn't replace one.", trig: ["/frontend", "polish this UI", "animate this component"] },
+  { name: "design-bootstrap-workflow", cat: "design", use: "Single page/feature design bootstrap: taste references, 5 first-pass variants, 3 refinements, manual asset prompts, tweak bar, and anti-slop review before production handoff.", trig: ["/design-bootstrap", "bootstrap this page design", "create design variants"] },
   { name: "ai-ui-design", cat: "design", use: "Building a new UI with AI, or adding pages to an existing app. Design-system-first workflow; also has an audit mode for \"why does this look AI-generated.\"", trig: ["build a new UI", "add a page", "audit AI smell"] },
   { name: "reference-to-design-system", cat: "design", use: "Have a screenshot, Figma file, or URL you want to clone the look of — turns it into a design.md + design.html an agent can follow consistently.", trig: ["turn this screenshot into a design system", "clone this look"] },
 
