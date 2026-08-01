@@ -89,6 +89,7 @@ Non-blocking. Skip if stack is already decided or obvious from PRD.
 ### Step 1 — PRD
 Invoke `prd-builder` skill. Output: draft PRD document.
 - If `/project-init existing`: skip to Step 3.
+- `prd-builder` has no filesystem access (chat-only) — after it delivers the markdown, write it to `PRD.md` at project root yourself. Do not leave the PRD chat-only.
 
 **Memory checkpoint 1 (after PRD complete):**
 Append to `memory/decisions.md`:
