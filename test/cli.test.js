@@ -5,6 +5,8 @@ import os from "node:os";
 import path from "node:path";
 import { installBundle } from "../lib/install.js";
 import { scaffoldCodexPlugin } from "../lib/plugin.js";
+import { checkToolchains } from "../lib/chain.js";
+import { TOOLCHAINS } from "../lib/constants.js";
 
 test("installBundle copies skills and codex agent companion", async () => {
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), "tado-install-"));
@@ -132,4 +134,9 @@ test("scaffoldCodexPlugin writes plugin files and marketplace entry", async () =
   assert.equal(pluginManifest.name, "tado");
   assert.equal(marketplace.plugins[0].name, "tado");
   assert.equal(marketplace.plugins[0].source.path, "./plugins/tado");
+});
+
+test("checkToolchains finds no unknown skills across every declared toolchain", () => {
+  assert.equal(TOOLCHAINS.length > 0, true);
+  assert.deepEqual(checkToolchains(), []);
 });
