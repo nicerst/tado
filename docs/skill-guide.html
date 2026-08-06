@@ -266,6 +266,7 @@ const CAT_META = {
   "trading":           { icon: "📈", color: "#d1901f" },
 };
 CAT_META["media-design"] = { icon: "🎬", color: "#13a8a8" };
+CAT_META["chains"] = { icon: "⛓️", color: "#6a5f4b" };
 
 /* ---------- Skill data ---------- */
 const SKILLS = [
@@ -340,6 +341,15 @@ const SKILLS = [
   { name: "bibigpt-media-workflow", cat: "media-design", use: "Use BibiGPT for video/audio URL summaries, transcripts, chapters, batch synthesis, rewrites, and media library/feed/channel workflows.", trig: ["summarize this video", "extract transcript", "chapterize this podcast", "bibi summarize"] },
   { name: "video-toolkit-workflow", cat: "media-design", use: "Create explainer, product-demo, launch, sprint-review, or scripted videos through a Remotion-style production loop: brief, script, assets, timing, preview, render.", trig: ["create a video", "generate explainer video", "product demo video", "Remotion AI video workflow"] },
   { name: "open-design-plugin-authoring", cat: "media-design", use: "Create, validate, or prepare Open Design skills, plugins, templates, design systems, prototypes, decks, videos, or artifact packages.", trig: ["open design plugin", "create Open Design skill", "validate Open Design plugin"] },
+
+  { name: "new-project-bootstrap", cat: "chains", use: "Chain: project-init -> feature-init -> senior-engineer-prompting -> ralph -> no-mistakes-review-pipeline. Harness scaffolded -> feature scoped -> delegation prompt framed -> autonomous build loop -> merge gate.", trig: ["/new-project-bootstrap", "bootstrap this project end to end"] },
+  { name: "idea-to-shipped-app", cat: "chains", use: "Chain: claude-code-idea-to-build-loop -> prd-builder -> phased-app-build-system -> agentic-review-loop. Idea validated -> PRD drafted -> phased build -> PR-score gate before ship.", trig: ["/idea-to-shipped-app", "take this idea to a shipped app"] },
+  { name: "research-to-prompt", cat: "chains", use: "Chain: storm-research -> the-council -> craft-prompt. Research the facts -> decide what to do -> phrase it as an agent prompt.", trig: ["/research-to-prompt", "research this then turn it into a prompt"] },
+  { name: "loop-design-to-runtime-ops", cat: "chains", use: "Chain: loop-engineering -> agent-observability -> no-mistakes-review-pipeline. Design the autonomous loop -> instrument it once running -> gate future changes to it.", trig: ["/loop-design-to-runtime-ops", "design and instrument this agent loop"] },
+  { name: "design-system-to-implementation", cat: "chains", use: "Chain: reference-to-design-system -> frontend. Tokens/design system exported -> frontend implements against them.", trig: ["/design-system-to-implementation", "turn this reference into a design system and build it"] },
+  { name: "security-baseline-to-recon", cat: "chains", use: "Chain: vapt-init -> osint-recon-frameworks -> sherlock -> cloudfox -> nuclei -> bloodhound. vapt-init orchestrates each scanner against confirmed-authorized scope.", trig: ["/security-baseline-to-recon", "run the full security baseline chain"] },
+  { name: "ingest-to-skill-authoring", cat: "chains", use: "Chain: opensrc -> context7 -> repo-to-skill. Fetch real source/docs first so the written skill isn't hallucinated API surface.", trig: ["/ingest-to-skill-authoring", "turn this repo/docs into a skill without guessing the API"] },
+  { name: "session-hygiene-loop", cat: "chains", use: "Chain: doc-cleanup -> project-mid -> memory-writer. Clear cruft -> recalibrate drift -> persist what's worth keeping.", trig: ["/session-hygiene-loop", "clean up and recalibrate this project session"] },
 ];
 
 /* ---------- Workflow steps ---------- */
