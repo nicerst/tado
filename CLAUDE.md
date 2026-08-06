@@ -21,13 +21,13 @@ tado list                                    # print bundled skill names
 | Group | Skills |
 |-------|--------|
 | **lifecycle** | `apcp`, `aios-audit`, `wayfinder`, `project-init`, `project-mid`, `feature-init`, `ralph`, `memory-writer` |
-| **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright`, `osint-recon-frameworks`, `cloudfox`, `cyberchef`, `nuclei`, `sherlock`, `bloodhound` |
+| **engineering** | `harness-engineer`, `agentic-engineering`, `loop-engineering`, `vapt-init`, `playwright`, `osint-recon-frameworks`, `cloudfox`, `cyberchef`, `nuclei`, `sherlock`, `bloodhound`, `global-agent-guardrails`, `prompt-cache-cost-management` |
 | **design** | `frontend`, `ai-ui-design`, `reference-to-design-system` |
 | **media-design** | `bibigpt-media-workflow`, `media-design-bootstrap`, `open-design-plugin-authoring`, `video-toolkit-workflow`, `watch-video-and-answer` |
 | **research** | `storm-research`, `prd-builder`, `grill-with-docs`, `context7`, `opensrc`¹, `craft-prompt` |
 | **deliberation** | `the-council` |
-| **utilities** | `caveman`, `ai-news`², `doc-cleanup` |
-| **dev-workflow** | `agent-observability`, `agentic-review-loop`, `agentic-system-design`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `cloud-agent-build-verify-loop`, `fable-mode`, `goal-file-orchestration-prompt`, `herder-agent-workspace`, `in-house-ai-consultant-roadmap`, `no-mistakes-review-pipeline`, `phased-app-build-system`, `repo-to-skill`, `scrollworld`, `senior-engineer-prompting`, `yt-to-skill` |
+| **utilities** | `caveman`, `ai-news`², `doc-cleanup`, `wait-what`, `guided-setup-walkthrough` |
+| **dev-workflow** | `agent-observability`, `agentic-review-loop`, `agentic-system-design`, `ai-automation-delivery-loop`, `claude-code-idea-to-build-loop`, `claude-code-website-hacks`, `claude-design-workflow`, `cloud-agent-build-verify-loop`, `decision-review`, `fable-mode`, `git-worktree-isolation`, `goal-file-orchestration-prompt`, `herder-agent-workspace`, `in-house-ai-consultant-roadmap`, `no-mistakes-review-pipeline`, `phased-app-build-system`, `repo-to-skill`, `scrollworld`, `senior-engineer-prompting`, `yt-to-skill` |
 | **writing** | `humanize-proofreader` |
 | **personal-ops** | `personal-assistant-buildout`, `llm-wiki-builder`, `personal-web-cleanup` |
 | **trading** | `kronos-candlestick-forecasting`, `order-flow-trading`, `price-action-market-structure`, `trading-fundamentals`, `trend-pullback-trading` |
@@ -48,7 +48,7 @@ lib/plugin.js        Codex plugin scaffold + marketplace upsert
 lib/chain.js          validates TOOLCHAINS steps resolve to real SKILL_NAMES entries
 lib/constants.js     targets, layouts, skill names — single source of truth
 lib/fs-utils.js      ensureDir / copyOrSymlink / readJson / writeJson
-skills/              72 SKILL.md bundles (installed verbatim)
+skills/              79 SKILL.md bundles (installed verbatim)
 agents/codex/        harness-engineer.toml
 agents/claude/       harness-engineer.md
 test/cli.test.js     integration tests (no mocks)
