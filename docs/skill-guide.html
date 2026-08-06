@@ -53,10 +53,8 @@
 
   /* ---- Top bar (sticky) ---- */
   .topbar {
-    position: sticky; top: 0; z-index: 20; background: var(--bg);
-    padding: 18px 0 12px; border-bottom: 1px solid transparent;
+    padding: 18px 0 12px;
   }
-  .topbar.scrolled { border-bottom-color: var(--border); }
   .topbar-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .brand { display: flex; align-items: center; gap: 10px; }
   .brand-emoji { width: 26px; height: 26px; object-fit: contain; border-radius: 6px; }
@@ -698,12 +696,6 @@ document.getElementById("themeBtn").addEventListener("click", () => {
   const root = document.documentElement;
   const current = root.getAttribute("data-theme");
   root.setAttribute("data-theme", current === "dark" ? "light" : "dark");
-});
-
-/* ---------- Sticky shadow on scroll ---------- */
-const topbar = document.getElementById("topbar");
-window.addEventListener("scroll", () => {
-  topbar.classList.toggle("scrolled", window.scrollY > 4);
 });
 
 render();
