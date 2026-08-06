@@ -132,6 +132,11 @@
   .trig-pill:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
   .trig-pill.copied { background: var(--accent); color: #fff; border-color: var(--accent); }
   .expand-hint { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .chain-jump {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 12px;
+    background: none; border: none; color: var(--accent); cursor: pointer; padding: 0; font-family: inherit;
+  }
+  .chain-jump:hover { text-decoration: underline; }
 
   .empty { text-align: center; color: var(--muted); padding: 50px 0; font-size: 14px; }
 
@@ -266,7 +271,7 @@ const CAT_META = {
   "trading":           { icon: "📈", color: "#d1901f" },
 };
 CAT_META["media-design"] = { icon: "🎬", color: "#13a8a8" };
-CAT_META["chains"] = { icon: "⛓️", color: "#6a5f4b" };
+CAT_META["chains"] = { icon: "🔗", color: "#6a5f4b" };
 
 /* ---------- Skill data ---------- */
 const SKILLS = [
@@ -521,6 +526,7 @@ const CHAINS = [
     ]
   }
 ];
+const CHAIN_IDS = new Set(CHAINS.map(c => c.id));
 
 const PAGES = [
   {
@@ -559,7 +565,12 @@ function renderChainTabs() {
 
 function renderChainPage() {
   const page = PAGES.find(p => p.id === activePage);
-  document.getElementById("chain-intro").innerHTML = page.intro;
+  const jump = CHAIN_IDS.has(page.id)
+    ? `<button class="chain-jump" data-goto-skill="${page.id}">🔗 run this as one skill: /${page.id} →</button>`
+    : "";
+  document.getElementById("chain-intro").innerHTML = page.intro + jump;
+  const jumpBtn = document.querySelector('[data-goto-skill="' + page.id + '"]');
+  if (jumpBtn) jumpBtn.addEventListener("click", () => goToBrowseSkill(page.id));
   renderSteps("chain-steps", page.steps);
   const wrap = document.getElementById("chain-detours-wrap");
   if (page.detours && page.detours.length) {
@@ -569,6 +580,23 @@ function renderChainPage() {
   } else {
     wrap.style.display = "none";
   }
+}
+
+/* ---------- Cross-links between Browse Skills and Skill Chains ---------- */
+function switchTab(view) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.view === view));
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + view));
+}
+function goToBrowseSkill(name) {
+  switchTab("browse");
+  qEl.value = name;
+  render();
+}
+function goToChainPage(id) {
+  switchTab("chains");
+  activePage = id;
+  renderChainTabs();
+  renderChainPage();
 }
 
 /* ---------- Copy helper (works reliably on file:// too) ---------- */
@@ -633,6 +661,7 @@ function renderBrowse() {
         ${s.trig.map(t => `<span class="trig-pill" data-copy="${t.replace(/"/g, '&quot;')}">${t}</span>`).join("")}
       </div>
       <p class="expand-hint">${"click to " }${"show trigger phrases"}</p>
+      ${s.cat === "chains" ? `<button class="chain-jump" data-goto-chain="${s.name}">🔗 view step-by-step breakdown →</button>` : ""}
     </div>`;
   }).join("");
 
@@ -641,6 +670,11 @@ function renderBrowse() {
       if (e.target.classList.contains("trig-pill")) {
         e.stopPropagation();
         copyText(e.target.dataset.copy, e.target);
+        return;
+      }
+      if (e.target.dataset.gotoChain) {
+        e.stopPropagation();
+        goToChainPage(e.target.dataset.gotoChain);
         return;
       }
       card.classList.toggle("open");
